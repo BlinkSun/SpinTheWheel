@@ -1,0 +1,45 @@
+﻿<Window x:Class="MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpinTheWheel"
+        mc:Ignorable="d"
+        DataContext="{Binding MainViewModel, Source={StaticResource ViewModelLocator}}"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <!-- Subtle Button to Open Participants Manager -->
+        <Button Content="⚙" 
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Top" 
+                Width="30" 
+                Height="30" 
+                Margin="10"
+                ToolTip="Open Participants Manager"
+                Command="{Binding OpenParticipantsManagerCommand}" />
+
+        <!-- Wheel Placeholder -->
+        <Grid Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Ellipse Fill="LightGray" Stroke="Black" StrokeThickness="2" />
+            <Button Content="Spin"
+                    Width="100" 
+                    Height="100"
+                    Command="{Binding SpinWheelCommand}"
+                    IsEnabled="{Binding IsSpinning, Converter={StaticResource InverseBooleanConverter}}">
+                <Button.RenderTransform>
+                    <RotateTransform Angle="{Binding SpinAngle}" />
+                </Button.RenderTransform>
+            </Button>
+        </Grid>
+
+        <!-- Selected Participant Display -->
+        <TextBlock Text="{Binding SelectedParticipant.Name}"
+                   FontSize="30" 
+                   FontWeight="Bold" 
+                   Foreground="Black" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Bottom" 
+                   Margin="0,0,0,50"
+                   Visibility="{Binding SelectedParticipant, Converter={StaticResource NullToVisibilityConverter}}" />
+    </Grid>
+</Window>
