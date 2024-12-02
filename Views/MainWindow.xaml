@@ -5,10 +5,15 @@
         xmlns:local="clr-namespace:SpinTheWheel"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         Width="800"
-        Height="450"
+        Height="650"
         DataContext="{Binding MainViewModel, Source={StaticResource ViewModelLocator}}"
         mc:Ignorable="d">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <!--  Subtle Button to Open Participants Manager  -->
         <Button Width="30"
                 Height="30"
@@ -18,47 +23,44 @@
                 Command="{Binding OpenParticipantsManagerCommand}"
                 Content="⚙"
                 ToolTip="Open Participants Manager" />
-
         <!--  Wheel Placeholder  -->
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-            <!--  Wheel  -->
+            <!--  Roulette Wheel  -->
             <Canvas Width="400"
                     Height="400"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
-                <!--  Alternating Colored Segments  -->
-                <Path Data="M200,200 L200,0 A200,200 0 0,1 400,200 Z"
-                      Fill="LightBlue"
-                      Stroke="Black"
-                      StrokeThickness="1">
-                    <Path.RenderTransform>
-                        <RotateTransform Angle="{Binding SpinAngle}" CenterX="200" CenterY="200" />
-                    </Path.RenderTransform>
-                </Path>
-                <Path Data="M200,200 L400,200 A200,200 0 0,1 200,400 Z"
-                      Fill="LightCoral"
-                      Stroke="Black"
-                      StrokeThickness="1">
-                    <Path.RenderTransform>
-                        <RotateTransform Angle="{Binding SpinAngle}" CenterX="200" CenterY="200" />
-                    </Path.RenderTransform>
-                </Path>
-                <Path Data="M200,200 L200,400 A200,200 0 0,1 0,200 Z"
-                      Fill="LightGreen"
-                      Stroke="Black"
-                      StrokeThickness="1">
-                    <Path.RenderTransform>
-                        <RotateTransform Angle="{Binding SpinAngle}" CenterX="200" CenterY="200" />
-                    </Path.RenderTransform>
-                </Path>
-                <Path Data="M200,200 L0,200 A200,200 0 0,1 200,0 Z"
-                      Fill="LightYellow"
-                      Stroke="Black"
-                      StrokeThickness="1">
-                    <Path.RenderTransform>
-                        <RotateTransform Angle="{Binding SpinAngle}" CenterX="200" CenterY="200" />
-                    </Path.RenderTransform>
-                </Path>
+                <!--  Dynamically Generated Segments  -->
+                <ItemsControl ItemsSource="{Binding Segments}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Path Fill="{Binding Converter={StaticResource SegmentColorConverter}}"
+                                  Stroke="Black"
+                                  StrokeThickness="1">
+                                <Path.Data>
+                                    <PathGeometry>
+                                        <PathGeometry.Figures>
+                                            <PathFigure StartPoint="200,200">
+                                                <LineSegment Point="200,0" />
+                                                <ArcSegment IsLargeArc="{Binding IsLargeArc}"
+                                                            Point="200,200"
+                                                            Size="200,200" />
+                                            </PathFigure>
+                                        </PathGeometry.Figures>
+                                    </PathGeometry>
+                                </Path.Data>
+                                <Path.RenderTransform>
+                                    <RotateTransform Angle="{Binding}" CenterX="200" CenterY="200" />
+                                </Path.RenderTransform>
+                            </Path>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
                 <!--  Outer Circle  -->
                 <Ellipse Width="400"
@@ -82,8 +84,42 @@
                         Content="Spin"
                         IsEnabled="{Binding IsSpinning, Converter={StaticResource InverseBooleanConverter}}" />
             </Canvas>
-        </Grid>
 
+        </Grid>
+        <!--  Slider for Spin Duration  -->
+        <StackPanel Grid.Row="1"
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Orientation="Vertical">
+            <TextBlock HorizontalAlignment="Center"
+                       FontWeight="Bold"
+                       Text="Spin Duration (ms)" />
+            <Slider Width="300"
+                    IsSnapToTickEnabled="True"
+                    Maximum="5000"
+                    Minimum="1000"
+                    TickFrequency="500"
+                    Value="{Binding SpinDuration}" />
+            <TextBlock HorizontalAlignment="Center" Text="{Binding SpinDuration}" />
+        </StackPanel>
+        <!--  Slider for Number of Segments  -->
+        <StackPanel Grid.Row="2"
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Orientation="Vertical">
+            <TextBlock HorizontalAlignment="Center"
+                       FontWeight="Bold"
+                       Text="Number of Segments" />
+            <Slider Width="300"
+                    IsSnapToTickEnabled="True"
+                    Maximum="12"
+                    Minimum="2"
+                    TickFrequency="2"
+                    Value="{Binding NumberOfSegments}" />
+            <TextBlock HorizontalAlignment="Center" Text="{Binding NumberOfSegments}" />
+        </StackPanel>
         <!--  Selected Participant Display  -->
         <TextBlock Margin="0,0,0,50"
                    HorizontalAlignment="Center"

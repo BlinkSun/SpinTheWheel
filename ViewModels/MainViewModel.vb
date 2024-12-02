@@ -1,4 +1,5 @@
-﻿Imports SpinTheWheel.Models
+﻿Imports System.Collections.ObjectModel
+Imports SpinTheWheel.Models
 Imports SpinTheWheel.Services
 
 Namespace ViewModels
@@ -67,6 +68,52 @@ Namespace ViewModels
         End Property
 
         ''' <summary>
+        ''' Duration of the wheel spin animation in milliseconds.
+        ''' Controlled by a Slider in the UI.
+        ''' </summary>
+        Private spinDurationValue As Integer = 2000 ' Default value: 2 seconds
+        Public Property SpinDuration As Integer
+            Get
+                Return spinDurationValue
+            End Get
+            Set(value As Integer)
+                spinDurationValue = value
+                OnPropertyChanged(NameOf(SpinDuration))
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Number of segments in the wheel.
+        ''' </summary>
+        Private numberOfSegmentsValue As Integer = 6 ' Default: 6 segments
+        Public Property NumberOfSegments As Integer
+            Get
+                Return numberOfSegmentsValue
+            End Get
+            Set(value As Integer)
+                numberOfSegmentsValue = value
+                GenerateSegments()
+                OnPropertyChanged(NameOf(NumberOfSegments))
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Collection of segment angles for the wheel.
+        ''' </summary>
+        Public Property Segments As ObservableCollection(Of Double)
+
+        ''' <summary>
+        ''' Generates the segments based on the current number of segments.
+        ''' </summary>
+        Private Sub GenerateSegments()
+            Segments.Clear()
+            Dim anglePerSegment As Double = 360.0 / NumberOfSegments
+            For i As Integer = 0 To NumberOfSegments - 1
+                Segments.Add(i * anglePerSegment)
+            Next
+        End Sub
+
+        ''' <summary>
         ''' Constructor for MainViewModel.
         ''' </summary>
         ''' <param name="dbService">The shared DatabaseService instance.</param>
@@ -76,48 +123,28 @@ Namespace ViewModels
             databaseService = dbService
             SpinWheelCommand = New RelayCommand(AddressOf SpinWheel, Function() Not IsSpinning)
             OpenParticipantsManagerCommand = New RelayCommand(AddressOf OpenParticipantsManager)
+            Segments = New ObservableCollection(Of Double)()
+            GenerateSegments()
         End Sub
 
         ''' <summary>
         ''' Spins the wheel with an animation and selects a random participant.
         ''' </summary>
-        'Private Async Sub SpinWheel()
-        '    Try
-        '        IsSpinning = True
-
-        '        ' Simulate spinning animation
-        '        For angleIncrement As Integer = 1 To 360 Step 10
-        '            SpinAngle += angleIncrement
-        '            Await Task.Delay(50)
-        '        Next
-
-        '        ' Select a random participant from the database
-        '        Dim randomParticipant = databaseService.GetRandomParticipant()
-        '        If randomParticipant IsNot Nothing Then
-        '            SelectedParticipant = randomParticipant
-        '        Else
-        '            ErrorService.ShowWarning("No participants are available to select.")
-        '        End If
-        '    Catch ex As Exception
-        '        ErrorService.ShowError($"An error occurred while spinning the wheel: {ex.Message}")
-        '    Finally
-        '        IsSpinning = False
-        '    End Try
-        'End Sub
         Private Async Sub SpinWheel()
             Try
                 IsSpinning = True
                 Dim random As New Random()
-                Dim totalRotation As Integer = random.Next(1440, 2160) ' Entre 4 et 6 tours complets
+                Dim totalRotation As Integer = random.Next(1440, 2160) ' 4 to 6 full rotations
                 Dim currentRotation As Integer = 0
+                Dim stepDuration As Integer = SpinDuration \ totalRotation ' Adjust speed based on SpinDuration
 
                 While currentRotation < totalRotation
                     currentRotation += 10
                     SpinAngle = currentRotation Mod 360
-                    Await Task.Delay(20) ' Ajuster la vitesse de l'animation ici
+                    Await Task.Delay(stepDuration)
                 End While
 
-                ' Sélectionner un participant après l'animation
+                ' Select a random participant after the animation
                 Dim randomParticipant = databaseService.GetRandomParticipant()
                 If randomParticipant IsNot Nothing Then
                     SelectedParticipant = randomParticipant
@@ -130,7 +157,6 @@ Namespace ViewModels
                 IsSpinning = False
             End Try
         End Sub
-
 
         ''' <summary>
         ''' Opens the participants manager window in modal and reloads participants afterward.
