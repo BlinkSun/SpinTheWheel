@@ -33,7 +33,7 @@ Namespace ViewModels
                 ParticipantsViewModel = New ParticipantsViewModel(databaseService)
             Catch ex As Exception
                 ' Log or rethrow exception for debugging
-                MessageBox.Show($"Error in ViewModelLocator: {ex.Message}", "Initialization Error", MessageBoxButton.OK, MessageBoxImage.Error)
+                Debug.WriteLine($"Error in ViewModelLocator: {ex.Message}")
                 Throw
             End Try
         End Sub

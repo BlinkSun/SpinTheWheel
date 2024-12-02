@@ -30,7 +30,7 @@
         ''' <param name="parameter">The command parameter (ignored in this implementation).</param>
         ''' <returns>True if the command can execute; otherwise, false.</returns>
         Public Function CanExecute(parameter As Object) As Boolean Implements ICommand.CanExecute
-            Return If(canExecuteFunction Is Nothing, True, canExecuteFunction.Invoke())
+            Return canExecuteFunction Is Nothing OrElse canExecuteFunction.Invoke()
         End Function
 
         ''' <summary>

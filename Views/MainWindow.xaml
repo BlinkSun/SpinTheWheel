@@ -1,45 +1,97 @@
-﻿<Window x:Class="MainWindow"
+﻿<Window x:Class="MainWindow" Title="MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SpinTheWheel"
-        mc:Ignorable="d"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Width="800"
+        Height="450"
         DataContext="{Binding MainViewModel, Source={StaticResource ViewModelLocator}}"
-        Title="MainWindow" Height="450" Width="800">
+        mc:Ignorable="d">
     <Grid>
-        <!-- Subtle Button to Open Participants Manager -->
-        <Button Content="⚙" 
-                HorizontalAlignment="Right" 
-                VerticalAlignment="Top" 
-                Width="30" 
-                Height="30" 
+        <!--  Subtle Button to Open Participants Manager  -->
+        <Button Width="30"
+                Height="30"
                 Margin="10"
-                ToolTip="Open Participants Manager"
-                Command="{Binding OpenParticipantsManagerCommand}" />
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Command="{Binding OpenParticipantsManagerCommand}"
+                Content="⚙"
+                ToolTip="Open Participants Manager" />
 
-        <!-- Wheel Placeholder -->
-        <Grid Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Ellipse Fill="LightGray" Stroke="Black" StrokeThickness="2" />
-            <Button Content="Spin"
-                    Width="100" 
-                    Height="100"
-                    Command="{Binding SpinWheelCommand}"
-                    IsEnabled="{Binding IsSpinning, Converter={StaticResource InverseBooleanConverter}}">
-                <Button.RenderTransform>
-                    <RotateTransform Angle="{Binding SpinAngle}" />
-                </Button.RenderTransform>
-            </Button>
+        <!--  Wheel Placeholder  -->
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <!--  Wheel  -->
+            <Canvas Width="400"
+                    Height="400"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <!--  Alternating Colored Segments  -->
+                <Path Data="M200,200 L200,0 A200,200 0 0,1 400,200 Z"
+                      Fill="LightBlue"
+                      Stroke="Black"
+                      StrokeThickness="1">
+                    <Path.RenderTransform>
+                        <RotateTransform Angle="{Binding SpinAngle}" CenterX="200" CenterY="200" />
+                    </Path.RenderTransform>
+                </Path>
+                <Path Data="M200,200 L400,200 A200,200 0 0,1 200,400 Z"
+                      Fill="LightCoral"
+                      Stroke="Black"
+                      StrokeThickness="1">
+                    <Path.RenderTransform>
+                        <RotateTransform Angle="{Binding SpinAngle}" CenterX="200" CenterY="200" />
+                    </Path.RenderTransform>
+                </Path>
+                <Path Data="M200,200 L200,400 A200,200 0 0,1 0,200 Z"
+                      Fill="LightGreen"
+                      Stroke="Black"
+                      StrokeThickness="1">
+                    <Path.RenderTransform>
+                        <RotateTransform Angle="{Binding SpinAngle}" CenterX="200" CenterY="200" />
+                    </Path.RenderTransform>
+                </Path>
+                <Path Data="M200,200 L0,200 A200,200 0 0,1 200,0 Z"
+                      Fill="LightYellow"
+                      Stroke="Black"
+                      StrokeThickness="1">
+                    <Path.RenderTransform>
+                        <RotateTransform Angle="{Binding SpinAngle}" CenterX="200" CenterY="200" />
+                    </Path.RenderTransform>
+                </Path>
+
+                <!--  Outer Circle  -->
+                <Ellipse Width="400"
+                         Height="400"
+                         Stroke="Black"
+                         StrokeThickness="2" />
+
+                <!--  Central Button  -->
+                <Ellipse Canvas.Left="150"
+                         Canvas.Top="150"
+                         Width="100"
+                         Height="100"
+                         Fill="White"
+                         Stroke="Black"
+                         StrokeThickness="2" />
+                <Button Canvas.Left="160"
+                        Canvas.Top="160"
+                        Width="80"
+                        Height="80"
+                        Command="{Binding SpinWheelCommand}"
+                        Content="Spin"
+                        IsEnabled="{Binding IsSpinning, Converter={StaticResource InverseBooleanConverter}}" />
+            </Canvas>
         </Grid>
 
-        <!-- Selected Participant Display -->
-        <TextBlock Text="{Binding SelectedParticipant.Name}"
-                   FontSize="30" 
-                   FontWeight="Bold" 
-                   Foreground="Black" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Bottom" 
-                   Margin="0,0,0,50"
+        <!--  Selected Participant Display  -->
+        <TextBlock Margin="0,0,0,50"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Bottom"
+                   FontSize="30"
+                   FontWeight="Bold"
+                   Foreground="Black"
+                   Text="{Binding SelectedParticipant.Name}"
                    Visibility="{Binding SelectedParticipant, Converter={StaticResource NullToVisibilityConverter}}" />
     </Grid>
 </Window>

@@ -8,12 +8,28 @@ Namespace Converters
     Public Class NullToVisibilityConverter
         Implements IValueConverter
 
+        ''' <summary>
+        ''' Converts a value to its Visibility.
+        ''' </summary>
+        ''' <param name="value">The value to convert.</param>
+        ''' <param name="targetType">The target property type (ignored).</param>
+        ''' <param name="parameter">Optional parameter (ignored).</param>
+        ''' <param name="culture">The culture to use (ignored).</param>
+        ''' <returns>The Visibility value.</returns>
         Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
             Return If(value Is Nothing, Visibility.Collapsed, Visibility.Visible)
         End Function
 
+        ''' <summary>
+        ''' Converts back (not implemented for this converter).
+        ''' </summary>
+        ''' <param name="value">The value to convert back.</param>
+        ''' <param name="targetType">The target property type (ignored).</param>
+        ''' <param name="parameter">Optional parameter (ignored).</param>
+        ''' <param name="culture">The culture to use (ignored).</param>
+        ''' <returns>Not supported.</returns>
         Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
-            Throw New NotImplementedException()
+            Throw New NotImplementedException("ConvertBack is not implemented for NullToVisibilityConverter.")
         End Function
 
     End Class

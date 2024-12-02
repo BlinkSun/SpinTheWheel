@@ -9,6 +9,9 @@ Namespace ViewModels
     Public Class MainViewModel
         Inherits ViewModelBase
 
+        ''' <summary>
+        ''' Instance of the database service for retrieving participants.
+        ''' </summary>
         Private ReadOnly databaseService As DatabaseService
 
         ''' <summary>
@@ -22,7 +25,7 @@ Namespace ViewModels
         Public ReadOnly Property OpenParticipantsManagerCommand As ICommand
 
         ''' <summary>
-        ''' Selected participant to display on the UI.
+        ''' The participant currently selected by the wheel.
         ''' </summary>
         Private selectedParticipantValue As Participant
         Public Property SelectedParticipant As Participant
@@ -36,7 +39,7 @@ Namespace ViewModels
         End Property
 
         ''' <summary>
-        ''' Indicates whether the wheel is spinning.
+        ''' Indicates whether the wheel is currently spinning.
         ''' </summary>
         Private isSpinningValue As Boolean
         Public Property IsSpinning As Boolean
@@ -50,7 +53,7 @@ Namespace ViewModels
         End Property
 
         ''' <summary>
-        ''' Rotation angle of the wheel.
+        ''' Current rotation angle of the wheel.
         ''' </summary>
         Private spinAngleValue As Double
         Public Property SpinAngle As Double
@@ -68,46 +71,82 @@ Namespace ViewModels
         ''' </summary>
         ''' <param name="dbService">The shared DatabaseService instance.</param>
         Public Sub New(dbService As DatabaseService)
+            ArgumentNullException.ThrowIfNull(dbService)
+
             databaseService = dbService
             SpinWheelCommand = New RelayCommand(AddressOf SpinWheel, Function() Not IsSpinning)
             OpenParticipantsManagerCommand = New RelayCommand(AddressOf OpenParticipantsManager)
-            SelectedParticipant = Nothing
         End Sub
 
         ''' <summary>
-        ''' Simulates spinning the wheel and selects a random participant.
+        ''' Spins the wheel with an animation and selects a random participant.
         ''' </summary>
+        'Private Async Sub SpinWheel()
+        '    Try
+        '        IsSpinning = True
+
+        '        ' Simulate spinning animation
+        '        For angleIncrement As Integer = 1 To 360 Step 10
+        '            SpinAngle += angleIncrement
+        '            Await Task.Delay(50)
+        '        Next
+
+        '        ' Select a random participant from the database
+        '        Dim randomParticipant = databaseService.GetRandomParticipant()
+        '        If randomParticipant IsNot Nothing Then
+        '            SelectedParticipant = randomParticipant
+        '        Else
+        '            ErrorService.ShowWarning("No participants are available to select.")
+        '        End If
+        '    Catch ex As Exception
+        '        ErrorService.ShowError($"An error occurred while spinning the wheel: {ex.Message}")
+        '    Finally
+        '        IsSpinning = False
+        '    End Try
+        'End Sub
         Private Async Sub SpinWheel()
-            IsSpinning = True
+            Try
+                IsSpinning = True
+                Dim random As New Random()
+                Dim totalRotation As Integer = random.Next(1440, 2160) ' Entre 4 et 6 tours complets
+                Dim currentRotation As Integer = 0
 
-            ' Simulate spinning animation
-            For i As Integer = 1 To 360 Step 10
-                SpinAngle = SpinAngle + i
-                Await Task.Delay(50)
-            Next
+                While currentRotation < totalRotation
+                    currentRotation += 10
+                    SpinAngle = currentRotation Mod 360
+                    Await Task.Delay(20) ' Ajuster la vitesse de l'animation ici
+                End While
 
-            ' Select a random participant from the database
-            Dim randomParticipant = databaseService.GetRandomParticipant()
-            If randomParticipant IsNot Nothing Then
-                SelectedParticipant = randomParticipant
-            Else
-                MessageBox.Show("No participants available.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning)
-            End If
-
-            IsSpinning = False
+                ' Sélectionner un participant après l'animation
+                Dim randomParticipant = databaseService.GetRandomParticipant()
+                If randomParticipant IsNot Nothing Then
+                    SelectedParticipant = randomParticipant
+                Else
+                    ErrorService.ShowWarning("No participants are available to select.")
+                End If
+            Catch ex As Exception
+                ErrorService.ShowError($"An error occurred while spinning the wheel: {ex.Message}")
+            Finally
+                IsSpinning = False
+            End Try
         End Sub
 
+
         ''' <summary>
-        ''' Opens the participants manager window in modal.
+        ''' Opens the participants manager window in modal and reloads participants afterward.
         ''' </summary>
         Private Sub OpenParticipantsManager()
-            Dim participantsWindow As New ParticipantsWindow With {
-                .Owner = Application.Current.MainWindow
-            }
-            participantsWindow.ShowDialog()
+            Try
+                Dim participantsWindow As New ParticipantsWindow With {
+                    .Owner = Application.Current.MainWindow
+                }
+                participantsWindow.ShowDialog()
 
-            ' Reload participants after the manager window is closed
-            SelectedParticipant = Nothing
+                ' Clear the current selection after the manager window is closed
+                SelectedParticipant = Nothing
+            Catch ex As Exception
+                ErrorService.ShowError($"An error occurred while opening the participants manager: {ex.Message}")
+            End Try
         End Sub
 
     End Class
