@@ -100,18 +100,104 @@ Namespace ViewModels
         ''' <summary>
         ''' Collection of segment angles for the wheel.
         ''' </summary>
-        Public Property Segments As ObservableCollection(Of Double)
+        Public Property Segments As ObservableCollection(Of UIElement)
+
+        ''' <summary>
+        ''' Nombre de segments dans la roue.
+        ''' </summary>
+        Private segmentCountValue As Integer = 16
+        Public Property SegmentCount As Integer
+            Get
+                Return segmentCountValue
+            End Get
+            Set(value As Integer)
+                segmentCountValue = value
+                GenerateSegments()
+                OnPropertyChanged(NameOf(SegmentCount))
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Rayon de la roue.
+        ''' </summary>
+        Private Const Radius As Double = 300.0
 
         ''' <summary>
         ''' Generates the segments based on the current number of segments.
         ''' </summary>
         Private Sub GenerateSegments()
             Segments.Clear()
-            Dim anglePerSegment As Double = 360.0 / NumberOfSegments
-            For i As Integer = 0 To NumberOfSegments - 1
-                Segments.Add(i * anglePerSegment)
+            Dim centerX As Double = Radius
+            Dim centerY As Double = Radius
+            Dim angleStep As Double = 360.0 / SegmentCount
+
+            For i As Integer = 0 To SegmentCount - 1
+                Dim startAngle As Double = i * angleStep
+                Dim endAngle As Double = startAngle + angleStep
+                Dim midAngle As Double = startAngle + (angleStep / 2)
+
+                Dim startX As Double = centerX + Radius * Math.Cos(startAngle * Math.PI / 180.0)
+                Dim startY As Double = centerY - Radius * Math.Sin(startAngle * Math.PI / 180.0)
+                Dim endX As Double = centerX + Radius * Math.Cos(endAngle * Math.PI / 180.0)
+                Dim endY As Double = centerY - Radius * Math.Sin(endAngle * Math.PI / 180.0)
+                Dim midX As Double = centerX + (Radius / 2) * Math.Cos(midAngle * Math.PI / 180.0)
+                Dim midY As Double = centerY - (Radius / 2) * Math.Sin(midAngle * Math.PI / 180.0)
+
+                'Segment
+                Dim path As New Path() With {
+                    .Fill = If(i Mod 2 = 0, New SolidColorBrush(ColorConverter.ConvertFromString("#00874e")), Brushes.White),
+                    .Stroke = New SolidColorBrush(ColorConverter.ConvertFromString("#03673e")),
+                    .StrokeThickness = 3
+                }
+                Dim figure As New PathFigure() With {
+                    .StartPoint = New Point(centerX, centerY)
+                }
+                figure.Segments.Add(New LineSegment(New Point(startX, startY), True))
+                figure.Segments.Add(New ArcSegment(New Point(endX, endY), New Size(Radius, Radius), 0, False, SweepDirection.Counterclockwise, True))
+
+                Dim geometry As New PathGeometry()
+                geometry.Figures.Add(figure)
+                path.Data = geometry
+
+                Segments.Add(path)
+
+                'Image
+                'Dim image As New Image With {
+                '    .Width = 100,
+                '    .Height = 20,
+                '    .Stretch = Stretch.UniformToFill,
+                '    .Source = New BitmapImage(New Uri("pack://application:,,,/Assets/logo.png"))
+                '}
+
+                'Dim rotateTransform As New RotateTransform(-midAngle, 0.5, 0.5)
+                'image.RenderTransform = rotateTransform
+
+                'Canvas.SetLeft(image, midX)
+                'Canvas.SetTop(image, midY)
+
+                'Segments.Add(image)
+                'Dim image As New Image With {
+                '    .Width = 100,
+                '    .Height = 20,
+                '    .Stretch = Stretch.Fill,
+                '    .Source = New BitmapImage(New Uri("pack://application:,,,/Assets/logo.png"))
+                '}
+
+                '' Positionnement initial (mi-distance entre le centre et le bord)
+                'Dim imageX As Double = centerX + (Radius / 3) ' * Math.Cos(midAngle * Math.PI / 180.0)
+                'Dim imageY As Double = centerY - (image.Height / 2) ' * Math.Sin(midAngle * Math.PI / 180.0)
+
+                'Canvas.SetLeft(image, imageX) ' - (image.Width / 2))
+                'Canvas.SetTop(image, imageY) ' - (image.Height / 2))
+
+                '' Rotation autour du centre du cercle
+                'Dim rotateTransform As New RotateTransform(-midAngle, -(Radius / 3), -0.5)
+                'image.RenderTransform = rotateTransform
+
+                'Segments.Add(image)
             Next
         End Sub
+
 
         ''' <summary>
         ''' Constructor for MainViewModel.
@@ -123,7 +209,7 @@ Namespace ViewModels
             databaseService = dbService
             SpinWheelCommand = New RelayCommand(AddressOf SpinWheel, Function() Not IsSpinning)
             OpenParticipantsManagerCommand = New RelayCommand(AddressOf OpenParticipantsManager)
-            Segments = New ObservableCollection(Of Double)()
+            Segments = New ObservableCollection(Of UIElement)()
             GenerateSegments()
         End Sub
 
@@ -134,17 +220,33 @@ Namespace ViewModels
             Try
                 IsSpinning = True
                 Dim random As New Random()
-                Dim totalRotation As Integer = random.Next(1440, 2160) ' 4 to 6 full rotations
-                Dim currentRotation As Integer = 0
-                Dim stepDuration As Integer = SpinDuration \ totalRotation ' Adjust speed based on SpinDuration
 
-                While currentRotation < totalRotation
-                    currentRotation += 10
+                ' Configuration de la rotation
+                Dim totalRotation As Double = random.Next(1440, 2160) ' 4 à 6 rotations complètes
+                Dim currentRotation As Double = 0.0
+                Dim velocity As Double = 20 ' Vitesse initiale
+                Dim deceleration As Double = 0.98 ' Facteur de désaccélération
+                Dim minVelocity As Double = 0.75 ' Vitesse minimale avant d'arrêter
+
+                ' Phase 1 : Rotation constante
+                Dim spinStartTime As DateTime = DateTime.Now
+                While (DateTime.Now - spinStartTime).TotalMilliseconds < SpinDuration
+                    currentRotation += velocity
                     SpinAngle = currentRotation Mod 360
+                    Await Task.Delay(10)
+                End While
+
+                ' Phase 2 : Désaccélération progressive
+                currentRotation = 0.0
+                While currentRotation < totalRotation AndAlso velocity > minVelocity
+                    currentRotation += velocity
+                    SpinAngle = currentRotation Mod 360
+                    velocity *= deceleration
+                    Dim stepDuration As Integer = Math.Max(10, CInt(100 / velocity))
                     Await Task.Delay(stepDuration)
                 End While
 
-                ' Select a random participant after the animation
+                ' Sélectionner un participant aléatoire après l'animation
                 Dim randomParticipant = databaseService.GetRandomParticipant()
                 If randomParticipant IsNot Nothing Then
                     SelectedParticipant = randomParticipant

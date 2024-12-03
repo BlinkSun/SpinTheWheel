@@ -11,6 +11,8 @@
             <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <conv:InverseBooleanConverter x:Key="InverseBooleanConverter" />
             <vm:ViewModelLocator x:Key="ViewModelLocator" />
+
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
