@@ -1,12 +1,11 @@
-﻿<Window x:Class="MainWindow"
+﻿<Window x:Class="Views.MainWindow" Title="MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:SpinTheWheel"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Title="MainWindow"
-        Width="800"
-        Height="650"
+        Width="900"
+        Height="750"
         DataContext="{Binding MainViewModel, Source={StaticResource ViewModelLocator}}"
         mc:Ignorable="d">
     <Window.Resources>
@@ -45,66 +44,6 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
-        <!--  Base Button  -->
-        <Style x:Key="BaseButtonStyle" TargetType="Button">
-            <Setter Property="Margin" Value="10" />
-            <Setter Property="Padding" Value="5,8" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="Black" />
-            <Setter Property="TextBlock.TextAlignment" Value="Center" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Border x:Name="ButtonBorder"
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="4" />
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <!--  MouseOver  -->
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ButtonBorder" Property="Background" Value="#03673e" />
-                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#03673e" />
-                                <Setter Property="Foreground" Value="White" />
-                            </Trigger>
-                            <!--  Pressed  -->
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="ButtonBorder" Property="Background" Value="#0f85e2" />
-                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#0f85e2" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!--  Primary Button  -->
-        <Style x:Key="PrimaryButtonStyle"
-               BasedOn="{StaticResource BaseButtonStyle}"
-               TargetType="Button">
-            <Setter Property="Background" Value="#00884e" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="BorderBrush" Value="#00884e" />
-        </Style>
-
-        <!--  Secondary Button  -->
-        <Style x:Key="SecondaryButtonStyle"
-               BasedOn="{StaticResource BaseButtonStyle}"
-               TargetType="Button">
-            <Setter Property="Background" Value="White" />
-            <Setter Property="Foreground" Value="#007944" />
-            <Setter Property="BorderBrush" Value="#007944" />
         </Style>
     </Window.Resources>
     <Grid>
@@ -202,10 +141,10 @@
                          StrokeThickness="3" />
 
                 <!--  Central Clickable Button  -->
-                <Button Canvas.Left="150"
-                        Canvas.Top="150"
-                        Width="150"
-                        Height="150"
+                <Button Canvas.Left="200"
+                        Canvas.Top="200"
+                        Width="200"
+                        Height="200"
                         Command="{Binding SpinWheelCommand}"
                         Content="SPIN"
                         FontSize="32"
@@ -214,7 +153,6 @@
                         Style="{StaticResource RoundButtonStyle}" />
             </Canvas>
         </Grid>
-
         <!--  Slider for Spin Duration  -->
         <StackPanel Grid.Row="1"
                     Margin="0,20,0,0"

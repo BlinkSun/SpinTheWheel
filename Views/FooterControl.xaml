@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="Views.FooterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SpinTheWheel"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="50"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+    <Grid Height="50" Background="{StaticResource PrimaryBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  Logo  -->
+        <Image Width="100"
+               Height="30"
+               Margin="10"
+               VerticalAlignment="Center"
+               Source="pack://application:,,,/Assets/logo.png"
+               Stretch="Uniform">
+            <Image.Effect>
+                <DropShadowEffect BlurRadius="10"
+                                  Opacity="0.5"
+                                  ShadowDepth="5"
+                                  Color="Black" />
+            </Image.Effect>
+        </Image>
+
+        <!--  Copyright Text  -->
+        <!--<TextBlock Grid.Column="1"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="14"
+                   Foreground="White"
+                   Text="© 2024 YourCompany. All rights reserved." />-->
+
+        <!--  Optional Content  -->
+        <ContentPresenter Grid.Column="1"
+                          Margin="10"
+                          VerticalAlignment="Center"
+                          Content="{Binding Content, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+    </Grid>
+</UserControl>

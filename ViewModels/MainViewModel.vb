@@ -1,6 +1,7 @@
 ﻿Imports System.Collections.ObjectModel
 Imports SpinTheWheel.Models
 Imports SpinTheWheel.Services
+Imports SpinTheWheel.Views
 
 Namespace ViewModels
 
@@ -136,12 +137,12 @@ Namespace ViewModels
                 Dim endAngle As Double = startAngle + angleStep
                 Dim midAngle As Double = startAngle + (angleStep / 2)
 
-                Dim startX As Double = centerX + Radius * Math.Cos(startAngle * Math.PI / 180.0)
-                Dim startY As Double = centerY - Radius * Math.Sin(startAngle * Math.PI / 180.0)
-                Dim endX As Double = centerX + Radius * Math.Cos(endAngle * Math.PI / 180.0)
-                Dim endY As Double = centerY - Radius * Math.Sin(endAngle * Math.PI / 180.0)
-                Dim midX As Double = centerX + (Radius / 2) * Math.Cos(midAngle * Math.PI / 180.0)
-                Dim midY As Double = centerY - (Radius / 2) * Math.Sin(midAngle * Math.PI / 180.0)
+                Dim startX As Double = centerX + (Radius * Math.Cos(startAngle * Math.PI / 180.0))
+                Dim startY As Double = centerY - (Radius * Math.Sin(startAngle * Math.PI / 180.0))
+                Dim endX As Double = centerX + (Radius * Math.Cos(endAngle * Math.PI / 180.0))
+                Dim endY As Double = centerY - (Radius * Math.Sin(endAngle * Math.PI / 180.0))
+                Dim midX As Double = centerX + (Radius / 2 * Math.Cos(midAngle * Math.PI / 180.0))
+                Dim midY As Double = centerY - (Radius / 2 * Math.Sin(midAngle * Math.PI / 180.0))
 
                 'Segment
                 Dim path As New Path() With {

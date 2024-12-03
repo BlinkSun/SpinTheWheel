@@ -37,5 +37,7 @@ Namespace ViewModels
                 Throw
             End Try
         End Sub
+
     End Class
+
 End Namespace
