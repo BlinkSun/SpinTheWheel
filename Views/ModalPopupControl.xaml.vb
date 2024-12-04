@@ -5,15 +5,21 @@ Namespace Views
     Partial Public Class ModalPopupControl
         Inherits UserControl
 
+        Private ReadOnly PopupInputValideColor As SolidColorBrush
+        Private ReadOnly PopupInputInvalideColor As SolidColorBrush
+
+        ' Constructor
         Public Sub New()
-            Visibility = Visibility.Collapsed
             InitializeComponent()
             Buttons = New ObservableCollection(Of UIElement)()
+            PopupInputValideColor = PopupInput.BorderBrush
+            PopupInputInvalideColor = New SolidColorBrush(Colors.Red)
         End Sub
 
+        ' Dependency Properties
         ' Title Property
         Public Shared ReadOnly TitleProperty As DependencyProperty = DependencyProperty.Register(
-        NameOf(Title), GetType(String), GetType(ModalPopupControl), New PropertyMetadata(String.Empty))
+            NameOf(Title), GetType(String), GetType(ModalPopupControl), New PropertyMetadata(String.Empty))
 
         Public Property Title As String
             Get
@@ -26,7 +32,7 @@ Namespace Views
 
         ' Message Property
         Public Shared ReadOnly MessageProperty As DependencyProperty = DependencyProperty.Register(
-        NameOf(Message), GetType(String), GetType(ModalPopupControl), New PropertyMetadata(String.Empty))
+            NameOf(Message), GetType(String), GetType(ModalPopupControl), New PropertyMetadata(String.Empty))
 
         Public Property Message As String
             Get
@@ -39,7 +45,7 @@ Namespace Views
 
         ' UserInput Property
         Public Shared ReadOnly UserInputProperty As DependencyProperty = DependencyProperty.Register(
-        NameOf(UserInput), GetType(String), GetType(ModalPopupControl), New PropertyMetadata(String.Empty))
+            NameOf(UserInput), GetType(String), GetType(ModalPopupControl), New PropertyMetadata(String.Empty))
 
         Public Property UserInput As String
             Get
@@ -52,7 +58,7 @@ Namespace Views
 
         ' IsInputVisible Property
         Public Shared ReadOnly IsInputVisibleProperty As DependencyProperty = DependencyProperty.Register(
-        NameOf(IsInputVisible), GetType(Boolean), GetType(ModalPopupControl), New PropertyMetadata(False))
+            NameOf(IsInputVisible), GetType(Boolean), GetType(ModalPopupControl), New PropertyMetadata(False))
 
         Public Property IsInputVisible As Boolean
             Get
@@ -65,7 +71,7 @@ Namespace Views
 
         ' Buttons Property
         Public Shared ReadOnly ButtonsProperty As DependencyProperty = DependencyProperty.Register(
-        NameOf(Buttons), GetType(ObservableCollection(Of UIElement)), GetType(ModalPopupControl), New PropertyMetadata(Nothing))
+            NameOf(Buttons), GetType(ObservableCollection(Of UIElement)), GetType(ModalPopupControl), New PropertyMetadata(Nothing))
 
         Public Property Buttons As ObservableCollection(Of UIElement)
             Get
@@ -76,13 +82,9 @@ Namespace Views
             End Set
         End Property
 
-        Public Shared ReadOnly IsPopupVisibleProperty As DependencyProperty =
-    DependencyProperty.Register(
-        NameOf(IsPopupVisible),
-        GetType(Boolean),
-        GetType(ModalPopupControl),
-        New PropertyMetadata(False, AddressOf OnIsPopupVisibleChanged)
-    )
+        ' IsPopupVisible Property
+        Public Shared ReadOnly IsPopupVisibleProperty As DependencyProperty = DependencyProperty.Register(
+            NameOf(IsPopupVisible), GetType(Boolean), GetType(ModalPopupControl), New PropertyMetadata(False, AddressOf OnIsPopupVisibleChanged))
 
         Public Property IsPopupVisible As Boolean
             Get
@@ -93,24 +95,9 @@ Namespace Views
             End Set
         End Property
 
-        Private Shared Sub OnIsPopupVisibleChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
-            Dim control As ModalPopupControl = DirectCast(d, ModalPopupControl)
-            If control.IsPopupVisible Then
-                control.Visibility = Visibility.Visible
-                control.Focusable = True
-                control.Focus() ' Donne le focus pour capturer les interactions clavier
-            Else
-                control.Visibility = Visibility.Collapsed
-            End If
-        End Sub
-
-        Public Shared ReadOnly IsModalProperty As DependencyProperty =
-    DependencyProperty.Register(
-        NameOf(IsModal),
-        GetType(Boolean),
-        GetType(ModalPopupControl),
-        New PropertyMetadata(False)
-    )
+        ' IsModal Property
+        Public Shared ReadOnly IsModalProperty As DependencyProperty = DependencyProperty.Register(
+            NameOf(IsModal), GetType(Boolean), GetType(ModalPopupControl), New PropertyMetadata(False))
 
         Public Property IsModal As Boolean
             Get
@@ -121,9 +108,34 @@ Namespace Views
             End Set
         End Property
 
+        ' DialogResult Property
+        Public Shared ReadOnly DialogResultProperty As DependencyProperty = DependencyProperty.Register(
+            NameOf(DialogResult), GetType(Boolean?), GetType(ModalPopupControl), New PropertyMetadata(Nothing))
+
+        Public Property DialogResult As Boolean?
+            Get
+                Return GetValue(DialogResultProperty)
+            End Get
+            Set(value As Boolean?)
+                SetValue(DialogResultProperty, value)
+            End Set
+        End Property
+
+        ' Event Handlers
+        Private Shared Sub OnIsPopupVisibleChanged(d As DependencyObject, e As DependencyPropertyChangedEventArgs)
+            Dim control As ModalPopupControl = DirectCast(d, ModalPopupControl)
+            If control.IsPopupVisible Then
+                control.Focusable = True
+                control.Focus()
+                If control.IsInputVisible Then
+                    control.PopupInput.Focus()
+                End If
+            End If
+        End Sub
+
         Private Sub Backdrop_MouseDown(sender As Object, e As MouseButtonEventArgs)
             If Not IsModal Then
-                Visibility = Visibility.Hidden
+                IsPopupVisible = False
             End If
         End Sub
 
@@ -133,9 +145,9 @@ Namespace Views
                 e.Handled = True
             ElseIf e.Key = Key.Enter Then
                 If IsInputVisible AndAlso String.IsNullOrWhiteSpace(UserInput) Then
-                    'MessageBox.Show("Veuillez saisir une valeur.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning)
+                    PopupInput.BorderBrush = PopupInputInvalideColor
                 Else
-                    Visibility = Visibility.Hidden
+                    IsPopupVisible = False
                 End If
                 e.Handled = True
             End If
@@ -145,35 +157,31 @@ Namespace Views
             Dim originalElement = TryCast(e.OriginalSource, FrameworkElement)
             If originalElement IsNot Nothing Then
                 Dim button = TryCast(originalElement, Button)
-                If button.IsDefault Then
-                    MessageBox.Show("Default cliqué.")
-                    DialogResult = True
-                ElseIf button.IsCancel Then
-                    MessageBox.Show("Cancel cliqué.")
-                    DialogResult = False
+                If button IsNot Nothing Then
+                    If button.IsDefault Then
+                        If IsInputVisible Then
+                            If String.IsNullOrEmpty(UserInput) Then
+                                PopupInput.BorderBrush = PopupInputInvalideColor
+                                e.Handled = True
+                                Return
+                            End If
+                        End If
+                        DialogResult = True
+                    ElseIf button.IsCancel Then
+                        DialogResult = False
+                    End If
                 End If
             End If
             IsPopupVisible = False
             e.Handled = True
         End Sub
 
-        Public Shared ReadOnly DialogResultProperty As DependencyProperty =
-    DependencyProperty.Register(
-        NameOf(DialogResult),
-        GetType(Boolean?),
-        GetType(ModalPopupControl),
-        New PropertyMetadata(Nothing)
-    )
+        Private Sub PopupInput_TextChanged(sender As Object, e As TextChangedEventArgs)
+            If Not String.IsNullOrEmpty(UserInput) Then
+                PopupInput.BorderBrush = PopupInputValideColor
+            End If
+        End Sub
 
-        Public Property DialogResult As Boolean?
-            Get
-                Return CStr(GetValue(DialogResultProperty))
-            End Get
-            Set(value As Boolean?)
-                SetValue(DialogResultProperty, value)
-            End Set
-        End Property
     End Class
-
 
 End Namespace

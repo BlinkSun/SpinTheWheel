@@ -1,4 +1,4 @@
-﻿<Window x:Class="Views.ParticipantsWindow"
+﻿<Window x:Class="Views.ParticipantsWindow" Title="Gestion des Participants"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,9 +6,8 @@
         xmlns:local="clr-namespace:SpinTheWheel"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:SpinTheWheel.Views"
-        Title="ParticipantsWindow"
-        Width="800"
-        Height="750"
+        Width="900"
+        Height="650"
         DataContext="{Binding ParticipantsViewModel, Source={StaticResource ViewModelLocator}}"
         mc:Ignorable="d">
     <Grid>
@@ -80,8 +79,7 @@
                         <DataTemplate>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="2*" />
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
@@ -92,18 +90,8 @@
                                 <CheckBox Grid.Column="1"
                                           VerticalAlignment="Center"
                                           IsChecked="{Binding Done, Mode=TwoWay}"
+                                          IsEnabled="False"
                                           Style="{StaticResource CheckBoxStyle}" />
-
-                                <!--  Delete Action  -->
-                                <Button Grid.Column="2"
-                                        Width="25"
-                                        Height="25"
-                                        Margin="5,0,0,0"
-                                        Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                        CommandParameter="{Binding}"
-                                        ToolTip="Delete">
-                                    <Image Source="pack://application:,,,/Assets/delete_icon.png" Stretch="Uniform" />
-                                </Button>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -138,7 +126,9 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Command="{Binding DataContext.GoToPageCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            <Button Width="32"
+                                    Height="32"
+                                    Command="{Binding DataContext.GoToPageCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding}"
                                     Content="{Binding}"
                                     Style="{StaticResource SecondaryButtonStyle}" />
@@ -163,19 +153,22 @@
                                  Grid.RowSpan="3"
                                  IsInputVisible="True"
                                  IsModal="True"
-                                 IsPopupVisible="True"
-                                 Message="Entrez le nom complet :?">
+                                 IsPopupVisible="False"
+                                 Message="Entrez le nom complet du participant :">
             <views:ModalPopupControl.Buttons>
-                <Button Width="50"
+                <Button Width="75"
                         Height="30"
+                        Margin="0,0,10,0"
                         Command="{Binding OKCommand}"
-                        Content="OK"
+                        Content="Ajouter"
+                        IsDefault="True"
                         Style="{StaticResource PrimaryButtonStyle}" />
                 <Button Width="75"
                         Height="30"
                         Margin="0"
                         Command="{Binding CancelCommand}"
-                        Content="Cancel"
+                        Content="Annuler"
+                        IsCancel="True"
                         Style="{StaticResource SecondaryButtonStyle}" />
             </views:ModalPopupControl.Buttons>
         </views:ModalPopupControl>

@@ -6,7 +6,7 @@
         Inherits UserControl
 
         ''' <summary>
-        ''' Dependency Property for customizable content in the header.
+        ''' Dependency Property for customizable header content.
         ''' </summary>
         Public Shared ReadOnly HeaderContentProperty As DependencyProperty = DependencyProperty.Register(
             NameOf(HeaderContent),
@@ -15,14 +15,14 @@
             New PropertyMetadata(Nothing))
 
         ''' <summary>
-        ''' Gets or sets the content displayed in the header content presenter.
+        ''' Gets or sets the content displayed in the header.
         ''' </summary>
         Public Property HeaderContent As Object
             Get
                 Return GetValue(HeaderContentProperty)
             End Get
             Set(value As Object)
-                SetValue(ContentProperty, value)
+                SetValue(HeaderContentProperty, value)
             End Set
         End Property
 

@@ -1,6 +1,6 @@
 ﻿Namespace Views
     ''' <summary>
-    ''' Interaction logic for ucFooter.xaml
+    ''' Interaction logic for FooterControl.xaml
     ''' </summary>
     Partial Public Class FooterControl
         Inherits UserControl
@@ -17,7 +17,7 @@
         ''' <summary>
         ''' Gets or sets the content displayed in the footer.
         ''' </summary>
-        Public Overloads Property FooterContent As Object
+        Public Property FooterContent As Object
             Get
                 Return GetValue(FooterContentProperty)
             End Get
