@@ -18,28 +18,16 @@
                Height="30"
                Margin="10"
                VerticalAlignment="Center"
-               Source="pack://application:,,,/Assets/logo.png"
+               Source="pack://application:,,,/Assets/desjardins.png"
                Stretch="Uniform">
             <Image.Effect>
                 <DropShadowEffect BlurRadius="10"
                                   Opacity="0.5"
-                                  ShadowDepth="5"
+                                  ShadowDepth="10"
                                   Color="Black" />
             </Image.Effect>
         </Image>
-
-        <!--  Copyright Text  -->
-        <!--<TextBlock Grid.Column="1"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   FontSize="14"
-                   Foreground="White"
-                   Text="© 2024 YourCompany. All rights reserved." />-->
-
-        <!--  Optional Content  -->
-        <ContentPresenter Grid.Column="1"
-                          Margin="10"
-                          VerticalAlignment="Center"
-                          Content="{Binding Content, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+        <!--  Content  -->
+        <ContentPresenter Grid.Column="1" Content="{Binding FooterContent, RelativeSource={RelativeSource AncestorType=UserControl}}" />
     </Grid>
 </UserControl>

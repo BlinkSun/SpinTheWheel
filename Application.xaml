@@ -1,10 +1,10 @@
 ﻿<Application x:Class="Application"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:conv="clr-namespace:SpinTheWheel.Converters"
+             xmlns:converters="clr-namespace:SpinTheWheel.Converters"
              xmlns:local="clr-namespace:SpinTheWheel"
              xmlns:vm="clr-namespace:SpinTheWheel.ViewModels"
-             StartupUri="Views/TestControlsWindow.xaml">
+             StartupUri="Views/ParticipantsWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <!--  Colors  -->
@@ -15,6 +15,9 @@
             <Color x:Key="BackgroundLight">#e6f2e6</Color>
             <Color x:Key="TextColor">#000000</Color>
             <Color x:Key="TextColorInverse">#FFFFFF</Color>
+            <Color x:Key="DisabledBackground">#F5F5F5</Color>
+            <Color x:Key="DisabledBorder">#D3D3D3</Color>
+            <Color x:Key="DisabledForeground">#A9A9A9</Color>
 
             <!--  Brushes  -->
             <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}" />
@@ -24,11 +27,15 @@
             <SolidColorBrush x:Key="BackgroundLightBrush" Color="{StaticResource BackgroundLight}" />
             <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}" />
             <SolidColorBrush x:Key="TextBrushInverse" Color="{StaticResource TextColorInverse}" />
+            <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="{StaticResource DisabledBackground}" />
+            <SolidColorBrush x:Key="DisabledBorderBrush" Color="{StaticResource DisabledBorder}" />
+            <SolidColorBrush x:Key="DisabledForegroundBrush" Color="{StaticResource DisabledForeground}" />
 
             <!--  Converters  -->
-            <conv:SegmentColorConverter x:Key="SegmentColorConverter" />
-            <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
-            <conv:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <converters:SegmentColorConverter x:Key="SegmentColorConverter" />
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <vm:ViewModelLocator x:Key="ViewModelLocator" />
 
             <!--  Styles  -->
@@ -165,20 +172,26 @@
                                 <ScrollViewer x:Name="PART_ContentHost" Padding="{TemplateBinding Padding}" />
                             </Border>
                             <ControlTemplate.Triggers>
-                                <!--  Focused  -->
+                                <!--  Focused Trigger  -->
                                 <Trigger Property="IsFocused" Value="True">
                                     <Setter TargetName="TextBoxBorder" Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
-                                    <Setter Property="Foreground" Value="{StaticResource SecondaryBrush}" />
+                                    <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
                                 </Trigger>
-                                <!--  MouseOver  -->
+                                <!--  MouseOver Trigger  -->
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter TargetName="TextBoxBorder" Property="BorderBrush" Value="{StaticResource HoverBrush}" />
+                                    <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Style>
+
+
+
+
+
             <!--  ListBox Style  -->
             <Style x:Key="ListBoxStyle" TargetType="ListBox">
                 <Setter Property="Margin" Value="10" />
@@ -293,55 +306,6 @@
                     </Trigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
-            <!--<Style x:Key="ComboBoxStyle" TargetType="ComboBox">
-                <Setter Property="Margin" Value="10" />
-                <Setter Property="Padding" Value="5,2" />
-                <Setter Property="FontSize" Value="14" />
-                <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="Foreground" Value="Black" />
-                <Setter Property="Background" Value="White" />
-                <Setter Property="BorderBrush" Value="#007944" />
-                <Setter Property="BorderThickness" Value="2" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ComboBox">
-                            <Grid>
-                                <Border x:Name="ComboBoxBorder"
-                                        Background="{TemplateBinding Background}"
-                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                        BorderThickness="{TemplateBinding BorderThickness}"
-                                        CornerRadius="4" />
-                                <TextBlock Margin="10,0,30,0"
-                                           VerticalAlignment="Center"
-                                           Text="{TemplateBinding Text}" />
-                                <ToggleButton Grid.Column="1"
-                                              IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
-                                              Template="{StaticResource ComboBoxToggleButton}" />
-                                <Popup Name="Popup"
-                                       IsOpen="{TemplateBinding IsDropDownOpen}"
-                                       Placement="Bottom">
-                                    <Border Background="White"
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="2"
-                                            CornerRadius="4">
-                                        <ScrollViewer>
-                                            <ItemsPresenter />
-                                        </ScrollViewer>
-                                    </Border>
-                                </Popup>
-                            </Grid>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="ComboBoxBorder" Property="BorderBrush" Value="#03673e" />
-                                </Trigger>
-                                <Trigger Property="IsDropDownOpen" Value="True">
-                                    <Setter TargetName="ComboBoxBorder" Property="BorderBrush" Value="#00884e" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>-->
             <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
                 <Setter Property="Margin" Value="10" />
                 <Setter Property="Padding" Value="5,2" />
@@ -462,7 +426,7 @@
                                          VerticalAlignment="Center"
                                          Fill="White"
                                          Stroke="#007944"
-                                         StrokeThickness="1" />
+                                         StrokeThickness="2" />
                             </Grid>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
@@ -543,6 +507,88 @@
                                                Fill="{TemplateBinding Foreground}" />
                                 </Grid>
                             </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!--  GroupBox Style  -->
+            <Style x:Key="GroupBoxStyle" TargetType="GroupBox">
+                <Setter Property="Margin" Value="10" />
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+                <Setter Property="Background" Value="{StaticResource BackgroundLightBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource SecondaryBrush}" />
+                <Setter Property="BorderThickness" Value="2" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="GroupBox">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Border Margin="10,0,0,0"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="8,8,0,0">
+                                    <TextBlock x:Name="GroupBoxHeader"
+                                               Grid.Row="0"
+                                               Padding="5,0"
+                                               HorizontalAlignment="Left"
+                                               VerticalAlignment="Top"
+                                               Background="{StaticResource PrimaryBrush}"
+                                               FontSize="16"
+                                               FontWeight="Bold"
+                                               Foreground="White"
+                                               Text="{TemplateBinding Header}" />
+                                </Border>
+                                <Border x:Name="GroupBoxBorder"
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="8">
+                                    <Grid>
+                                        <ContentPresenter Margin="{TemplateBinding Padding}" />
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <!--  Disabled State  -->
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <!--  Animate Background Color  -->
+                                                <ColorAnimation Storyboard.TargetName="GroupBoxBorder"
+                                                                Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                                To="#F5F5F5"
+                                                                Duration="0:0:0.3" />
+                                                <!--  Animate Border Color  -->
+                                                <ColorAnimation Storyboard.TargetName="GroupBoxBorder"
+                                                                Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                                To="#D3D3D3"
+                                                                Duration="0:0:0.3" />
+                                                <!--  Animate Header Foreground  -->
+                                                <ColorAnimation Storyboard.TargetName="GroupBoxHeader"
+                                                                Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                                                                To="#A9A9A9"
+                                                                Duration="0:0:0.3" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Setter TargetName="GroupBoxBorder" Property="Background" Value="{StaticResource DisabledBackgroundBrush}" />
+                                    <Setter TargetName="GroupBoxHeader" Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>

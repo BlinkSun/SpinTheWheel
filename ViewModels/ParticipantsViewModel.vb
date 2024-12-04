@@ -25,6 +25,8 @@ Namespace ViewModels
         Public ReadOnly Property DeleteCommand As ICommand
         Public ReadOnly Property SaveCommand As ICommand
         Public ReadOnly Property RefreshCommand As ICommand
+        Public ReadOnly Property OKCommand As ICommand
+        Public ReadOnly Property CancelCommand As ICommand
 
         Public Sub New(dbService As DatabaseService)
             ArgumentNullException.ThrowIfNull(dbService)
@@ -38,11 +40,21 @@ Namespace ViewModels
             RefreshCommand = New RelayCommand(AddressOf RefreshParticipants)
             ApplyFilterCommand = New RelayCommand(AddressOf ApplyFilter)
             GoToPageCommand = New RelayCommand(Of Integer)(AddressOf GoToPage)
+            OKCommand = New RelayCommand(AddressOf OnOKClicked)
+            CancelCommand = New RelayCommand(AddressOf OnCancelClicked)
 
             ' Load participants at initialization
             'RefreshParticipants()
         End Sub
+        Private Sub OnOKClicked()
+            ' Logique pour le bouton OK
+            Console.WriteLine("OK clicked")
+        End Sub
 
+        Private Sub OnCancelClicked()
+            ' Logique pour le bouton Cancel
+            Console.WriteLine("Cancel clicked")
+        End Sub
         Public Sub RefreshParticipants()
             Try
                 Participants.Clear()
@@ -108,7 +120,7 @@ Namespace ViewModels
         Private Sub UpdatePagination(participants As IEnumerable(Of Participant))
             Dim totalItems = participants.Count()
             Dim totalPages = Math.Ceiling(totalItems / ItemsPerPage)
-            PageNumbers = New ObservableCollection(Of Integer)(Enumerable.Range(1, CInt(totalPages)))
+            PageNumbers = New ObservableCollection(Of Integer)(Enumerable.Range(1, totalPages))
 
             ' Charger la page actuelle
             PagedParticipants = New ObservableCollection(Of Participant)(participants.Skip((CurrentPage - 1) * ItemsPerPage).Take(ItemsPerPage))

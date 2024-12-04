@@ -9,17 +9,17 @@
         ''' Dependency Property for customizable content in the header.
         ''' </summary>
         Public Shared ReadOnly HeaderContentProperty As DependencyProperty = DependencyProperty.Register(
-            NameOf(Content),
+            NameOf(HeaderContent),
             GetType(Object),
             GetType(HeaderControl),
             New PropertyMetadata(Nothing))
 
         ''' <summary>
-        ''' Gets or sets the content displayed in the header.
+        ''' Gets or sets the content displayed in the header content presenter.
         ''' </summary>
-        Public Overloads Property Content As Object
+        Public Property HeaderContent As Object
             Get
-                Return GetValue(ContentProperty)
+                Return GetValue(HeaderContentProperty)
             End Get
             Set(value As Object)
                 SetValue(ContentProperty, value)

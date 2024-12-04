@@ -9,7 +9,7 @@
         ''' Dependency Property for customizable footer content.
         ''' </summary>
         Public Shared ReadOnly FooterContentProperty As DependencyProperty = DependencyProperty.Register(
-            NameOf(Content),
+            NameOf(FooterContent),
             GetType(Object),
             GetType(FooterControl),
             New PropertyMetadata(Nothing))
@@ -17,7 +17,7 @@
         ''' <summary>
         ''' Gets or sets the content displayed in the footer.
         ''' </summary>
-        Public Overloads Property Content As Object
+        Public Overloads Property FooterContent As Object
             Get
                 Return GetValue(FooterContentProperty)
             End Get
