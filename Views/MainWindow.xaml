@@ -1,10 +1,10 @@
-﻿<Window x:Class="Views.MainWindow"
+﻿<Window x:Class="Views.MainWindow" Title="MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:SpinTheWheel"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Title="MainWindow"
+        xmlns:views="clr-namespace:SpinTheWheel.Views"
         Width="900"
         Height="750"
         DataContext="{Binding MainViewModel, Source={StaticResource ViewModelLocator}}"
@@ -49,32 +49,38 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <!--<StackPanel Grid.Row="2" Orientation="Vertical">
-        -->
-        <!--  Exemple de boutons  -->
-        <!--
-            <Button Width="200"
-                    Height="50"
-                    Content="⚙ Bouton Principal"
-                    Style="{StaticResource PrimaryButtonStyle}" />
-            <Button Width="200"
-                    Height="50"
-                    Content="Bouton Secondaire"
-                    Style="{StaticResource SecondaryButtonStyle}" />
-        </StackPanel>-->
-        <!--  Subtle Button to Open Participants Manager  -->
-        <Button Width="30"
+        <!--  Header  -->
+        <views:HeaderControl Grid.Row="0">
+            <views:HeaderControl.HeaderContent>
+                <StackPanel Margin="10"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                    <Label Margin="0,0,5,0"
+                           Content="Gestionnaire des Participants."
+                           Foreground="White"
+                           Style="{StaticResource PrimaryTitleLabel}" />
+                    <Label Margin="0,0,0,5"
+                           Content="{Binding Participants.Count}"
+                           ContentStringFormat="Total de {0} participants"
+                           Foreground="White"
+                           Style="{StaticResource SecondaryTitleLabel}" />
+                </StackPanel>
+            </views:HeaderControl.HeaderContent>
+        </views:HeaderControl>
+        <Button Width="120"
                 Height="30"
                 Margin="10"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Command="{Binding OpenParticipantsManagerCommand}"
-                Content="⚙"
+                Content="Gestion Participants"
                 Style="{StaticResource SecondaryButtonStyle}"
-                ToolTip="Open Participants Manager" />
+                ToolTip="Ouvrir le gestionnaire de Participants." />
         <Button Width="200"
                 Height="50"
                 HorizontalAlignment="Center"
@@ -82,7 +88,7 @@
                 Click="OnLaunchConfettiClick"
                 Content="Launch Confetti" />
         <!--  Wheel Placeholder  -->
-        <Grid>
+        <Grid Grid.Row="1">
             <Canvas Name="ConfettiCanvas"
                     Width="600"
                     Height="600"
@@ -155,7 +161,7 @@
             </Canvas>
         </Grid>
         <!--  Slider for Spin Duration  -->
-        <StackPanel Grid.Row="1"
+        <StackPanel Grid.Row="2"
                     Margin="0,20,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Bottom"
@@ -187,5 +193,17 @@
                    Foreground="Black"
                    Text="{Binding SelectedParticipant.Name}"
                    Visibility="{Binding SelectedParticipant, Converter={StaticResource NullToVisibilityConverter}}" />
+
+        <!--  Footer  -->
+        <views:FooterControl Grid.Row="3">
+            <views:FooterControl.FooterContent>
+                <Label Margin="10"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       Content="Footer Content"
+                       Foreground="White"
+                       Style="{StaticResource SecondaryTitleLabel}" />
+            </views:FooterControl.FooterContent>
+        </views:FooterControl>
     </Grid>
 </Window>

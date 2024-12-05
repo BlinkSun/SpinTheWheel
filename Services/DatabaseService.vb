@@ -125,6 +125,23 @@ Namespace Services
         End Sub
 
         ''' <summary>
+        ''' Reset flags of all participants in the database.
+        ''' </summary>
+        Public Sub UpdateParticipants()
+            Try
+                Using connection As SQLiteConnection = GetConnection()
+                    connection.Open()
+                    Dim updateQuery As String = "UPDATE Participant SET Done = 0, ""Order"" = -1;"
+                    Using command As New SQLiteCommand(updateQuery, connection)
+                        command.ExecuteNonQuery()
+                    End Using
+                End Using
+            Catch ex As Exception
+                Throw New ApplicationException($"Error updating participant: {ex.Message}", ex)
+            End Try
+        End Sub
+
+        ''' <summary>
         ''' Deletes a participant from the database.
         ''' </summary>
         ''' <param name="participant">The participant to delete.</param>
@@ -140,6 +157,23 @@ Namespace Services
                 End Using
             Catch ex As Exception
                 Throw New ApplicationException($"Error deleting participant with ID {participant.Id}: {ex.Message}", ex)
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Deletes all participants from the database.
+        ''' </summary>
+        Public Sub DeleteParticipants()
+            Try
+                Using connection As SQLiteConnection = GetConnection()
+                    connection.Open()
+                    Dim deleteQuery As String = "DELETE FROM Participant;"
+                    Using command As New SQLiteCommand(deleteQuery, connection)
+                        command.ExecuteNonQuery()
+                    End Using
+                End Using
+            Catch ex As Exception
+                Throw New ApplicationException($"Error deleting all participants: {ex.Message}", ex)
             End Try
         End Sub
 

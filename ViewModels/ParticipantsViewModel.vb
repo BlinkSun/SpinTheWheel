@@ -20,7 +20,6 @@ Namespace ViewModels
             End Set
         End Property
         Private filterTextValue As String
-
         Public Property Participants As ObservableCollection(Of Participant)
             Get
                 Return participantsValue
@@ -31,7 +30,6 @@ Namespace ViewModels
             End Set
         End Property
         Private participantsValue As ObservableCollection(Of Participant)
-
         Public Property FilteredParticipants As ObservableCollection(Of Participant)
             Get
                 Return filteredParticipantsValue
@@ -42,40 +40,6 @@ Namespace ViewModels
             End Set
         End Property
         Private filteredParticipantsValue As ObservableCollection(Of Participant)
-
-        Public Property IsUpdateModalPopupVisible As Boolean
-            Get
-                Return isUpdateModalPopupVisibleValue
-            End Get
-            Set(value As Boolean)
-                isUpdateModalPopupVisibleValue = value
-                OnPropertyChanged(NameOf(IsUpdateModalPopupVisible))
-            End Set
-        End Property
-        Private isUpdateModalPopupVisibleValue As Boolean
-
-        Public Property IsAddModalPopupVisible As Boolean
-            Get
-                Return isAddModalPopupVisibleValue
-            End Get
-            Set(value As Boolean)
-                isAddModalPopupVisibleValue = value
-                OnPropertyChanged(NameOf(IsAddModalPopupVisible))
-            End Set
-        End Property
-        Private isAddModalPopupVisibleValue As Boolean
-
-        Public Property IsDeleteModalPopupVisible As Boolean
-            Get
-                Return isDeleteModalPopupVisibleValue
-            End Get
-            Set(value As Boolean)
-                isDeleteModalPopupVisibleValue = value
-                OnPropertyChanged(NameOf(IsDeleteModalPopupVisible))
-            End Set
-        End Property
-        Private isDeleteModalPopupVisibleValue As Boolean
-
         Public Property SelectedParticipantDescription As String
             Get
                 Return selectedParticipantDescriptionValue
@@ -106,12 +70,9 @@ Namespace ViewModels
 
         Public ReadOnly Property AddCommand As RelayCommand
         Public ReadOnly Property UpdateCommand As RelayCommand(Of Participant)
+        Public ReadOnly Property UpdateAllCommand As RelayCommand
         Public ReadOnly Property DeleteCommand As RelayCommand(Of Participant)
-        Public ReadOnly Property RefreshCommand As RelayCommand
-        Public ReadOnly Property OnAddCommand As RelayCommand(Of String)
-        Public ReadOnly Property OnUpdateCommand As RelayCommand(Of String)
-        Public ReadOnly Property OnDeleteCommand As RelayCommand(Of Participant)
-        Public ReadOnly Property OnCancelCommand As RelayCommand
+        Public ReadOnly Property DeleteAllCommand As RelayCommand
         Public ReadOnly Property ApplyFilterCommand As RelayCommand
         Public ReadOnly Property ImportParticipantsCommand As RelayCommand
 
@@ -122,20 +83,17 @@ Namespace ViewModels
             Participants = New ObservableCollection(Of Participant)()
 
             AddCommand = New RelayCommand(AddressOf AddParticipant)
-            DeleteCommand = New RelayCommand(Of Participant)(AddressOf DeleteParticipant, Function() SelectedParticipant IsNot Nothing)
             UpdateCommand = New RelayCommand(Of Participant)(AddressOf UpdateParticipant, Function() SelectedParticipant IsNot Nothing)
-            RefreshCommand = New RelayCommand(AddressOf LoadParticipants)
-            OnAddCommand = New RelayCommand(Of String)(AddressOf OnAddClicked)
-            OnUpdateCommand = New RelayCommand(Of String)(AddressOf OnUpdateClicked)
-            OnDeleteCommand = New RelayCommand(Of Participant)(AddressOf OnDeleteClicked)
-            OnCancelCommand = New RelayCommand(AddressOf OnCancelClicked)
+            UpdateAllCommand = New RelayCommand(AddressOf UpdateParticipants)
+            DeleteCommand = New RelayCommand(Of Participant)(AddressOf DeleteParticipant, Function() SelectedParticipant IsNot Nothing)
+            DeleteAllCommand = New RelayCommand(AddressOf DeleteParticipants)
             ApplyFilterCommand = New RelayCommand(AddressOf ApplyFilter)
             ImportParticipantsCommand = New RelayCommand(AddressOf ImportParticipants)
 
-            'LoadParticipants()
+            'GetParticipants()
         End Sub
 
-        Public Sub LoadParticipants()
+        Public Sub GetParticipants()
             Try
                 Participants.Clear()
                 Dim participantsFromDb = databaseService.GetParticipants()
@@ -147,17 +105,10 @@ Namespace ViewModels
                 ErrorService.ShowError($"Erreur lors du chargement des participants : {ex.Message}")
             End Try
         End Sub
+
         Private Sub AddParticipant()
-            IsAddModalPopupVisible = True
-        End Sub
-        Private Sub DeleteParticipant()
-            IsDeleteModalPopupVisible = True
-        End Sub
-        Private Sub UpdateParticipant()
-            IsUpdateModalPopupVisible = True
-        End Sub
-        Private Sub OnAddClicked(name As String)
             Try
+                Dim name As String = InputBox("Entrez le nom de ce nouveau participant :", "Ajouter Participant")
                 If Not String.IsNullOrWhiteSpace(name) Then
                     Dim newParticipant = New Participant() With {
                         .Name = name
@@ -170,32 +121,57 @@ Namespace ViewModels
                 ErrorService.ShowError($"Error adding a new participant: {ex.Message}")
             End Try
         End Sub
-        Private Sub OnUpdateClicked(name As String)
+        Private Sub UpdateParticipant()
             Try
                 If SelectedParticipant IsNot Nothing Then
-                    SelectedParticipant.Name = name
-                    databaseService.UpdateParticipant(SelectedParticipant)
-                    ApplyFilter()
+                    Dim newName As String = InputBox("Entrez un nouveau nom pour ce participant :", "Modifier Participant", SelectedParticipant.Name)
+                    If Not String.IsNullOrWhiteSpace(newName) Then
+                        SelectedParticipant.Name = newName
+                        databaseService.UpdateParticipant(SelectedParticipant)
+                        ApplyFilter()
+                    End If
                 End If
             Catch ex As Exception
                 ErrorService.ShowError($"Erreur lors de la mise à jour du participant : {ex.Message}")
             End Try
         End Sub
-        Private Sub OnDeleteClicked()
+        Private Sub UpdateParticipants()
+            Try
+                If MessageBox.Show("Tous les participants seront réinitialisés à l'état non pigé. Voulez-vous continuer ?", "Réinitialiser le tirage.", MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
+                    SelectedParticipant = Nothing
+                    databaseService.UpdateParticipants()
+                    GetParticipants()
+                End If
+            Catch ex As Exception
+                ErrorService.ShowError($"Erreur lors de la suppression des participants : {ex.Message}")
+            End Try
+        End Sub
+        Private Sub DeleteParticipant()
             Try
                 If SelectedParticipant IsNot Nothing Then
-                    databaseService.DeleteParticipant(SelectedParticipant)
-                    Participants.Remove(SelectedParticipant)
-                    SelectedParticipant = Nothing
-                    ApplyFilter()
+                    If MessageBox.Show("Êtes-vous sûr de vouloir supprimer ce participant ?", "Suppression d'un participant", MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
+                        databaseService.DeleteParticipant(SelectedParticipant)
+                        Participants.Remove(SelectedParticipant)
+                        SelectedParticipant = Nothing
+                        ApplyFilter()
+                    End If
                 End If
             Catch ex As Exception
                 ErrorService.ShowError($"Erreur lors de la suppression du participant : {ex.Message}")
             End Try
         End Sub
-        Private Sub OnCancelClicked()
-            Console.WriteLine("Cancel clicked")
+        Private Sub DeleteParticipants()
+            Try
+                If MessageBox.Show("Êtes-vous sûr de vouloir effacer tous les participants de la liste ?" & vbCrLf & "Cette action est irréversible.", "Suppression de tous les participants", MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
+                    SelectedParticipant = Nothing
+                    databaseService.DeleteParticipants()
+                    GetParticipants()
+                End If
+            Catch ex As Exception
+                ErrorService.ShowError($"Erreur lors de la suppression du participant : {ex.Message}")
+            End Try
         End Sub
+
         Private Sub ApplyFilter()
             Dim filteredList As List(Of Participant) = If(String.IsNullOrWhiteSpace(FilterText),
                                   Participants.ToList,
@@ -207,7 +183,7 @@ Namespace ViewModels
             Try
                 Dim openFileDialog As New Microsoft.Win32.OpenFileDialog With {
                     .Title = "Sélectionner un fichier de participants",
-                    .Filter = "Fichiers texte (*.txt)|*.txt",
+                    .Filter = "Fichiers texte (*.txt)|*.txt|Fichiers csv (*.csv)|*.csv",
                     .Multiselect = False
                 }
 
@@ -219,7 +195,7 @@ Namespace ViewModels
                     Using fileStream = IO.File.Open(filePath, FileMode.Open, FileAccess.Read)
                         ' Fichier accessible, on ferme le flux immédiatement
                     End Using
-                    Dim lines As String() = File.ReadAllLines(filePath)
+                    Dim lines As String() = File.ReadAllLines(filePath, Text.Encoding.UTF8)
                     If lines.Length = 0 Then
                         Throw New InvalidDataException("Le fichier est vide.")
                     End If
@@ -246,7 +222,7 @@ Namespace ViewModels
                         ErrorService.ShowInfo("Tous les participants ont été importés avec succès !", "Importation réussie")
                     End If
 
-                    LoadParticipants()
+                    GetParticipants()
                 End If
             Catch ex As FileNotFoundException
                 ErrorService.ShowError($"Erreur : {ex.Message}", "Fichier introuvable")

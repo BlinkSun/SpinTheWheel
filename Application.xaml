@@ -248,6 +248,10 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="CheckBox">
                             <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
                                 <Border x:Name="CheckBoxBorder"
                                         Width="20"
                                         Height="20"
@@ -267,7 +271,7 @@
                                       StrokeThickness="3"
                                       Visibility="Collapsed" />
                                 <ContentPresenter Grid.Column="1"
-                                                  Margin="30,0,0,0"
+                                                  Margin="10,0,0,0"
                                                   VerticalAlignment="Center" />
                             </Grid>
                             <ControlTemplate.Triggers>
