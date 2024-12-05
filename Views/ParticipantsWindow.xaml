@@ -1,4 +1,4 @@
-﻿<Window x:Class="Views.ParticipantsWindow" Title="Gestion des Participants"
+﻿<Window x:Class="Views.ParticipantsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SpinTheWheel"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:SpinTheWheel.Views"
+        Title="Gestion des Participants"
         Width="900"
         Height="650"
         DataContext="{Binding ParticipantsViewModel, Source={StaticResource ViewModelLocator}}"
@@ -38,104 +39,118 @@
         <Grid Grid.Row="1" Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
             <!--  Filter Section  -->
-            <StackPanel Grid.Row="0" Orientation="Horizontal">
-                <TextBox Width="300"
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                <TextBox Width="200"
+                         HorizontalAlignment="Left"
                          VerticalAlignment="Center"
                          Style="{StaticResource TextBoxStyle}"
                          Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" />
-                <Button Width="150"
+                <Button Width="80"
                         Height="40"
                         Command="{Binding ApplyFilterCommand}"
-                        Content="Appliquer le filtre"
-                        Style="{StaticResource SecondaryButtonStyle}" />
+                        Content="Filtrer"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        ToolTip="Filtrer par nom de participant." />
             </StackPanel>
+            <Button Width="90"
+                    Height="40"
+                    HorizontalAlignment="Right"
+                    Command="{Binding ImportParticipantsCommand}"
+                    Content="Importer"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    ToolTip="Importer une liste de participant à l'aide d'un fichier." />
             <!--  List of Participants  -->
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+            <ListBox Grid.Row="2"
+                     HorizontalContentAlignment="Stretch"
+                     ItemsSource="{Binding FilteredParticipants}"
+                     SelectedItem="{Binding SelectedParticipant}"
+                     SelectionMode="Single"
+                     Style="{StaticResource ListBoxStyle}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                <d:Label Content="This is a Body Label." Style="{StaticResource BodyLabel}" />
+                            <!--  Participant Name  -->
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
 
-                <ListBox Grid.Row="1"
-                         Grid.ColumnSpan="2"
-                         HorizontalContentAlignment="Stretch"
-                         d:ItemsSource="{d:SampleData ItemCount=5}"
-                         ItemsSource="{Binding PagedParticipants}"
-                         SelectedItem="{Binding SelectedParticipant}"
-                         SelectionMode="Single"
-                         Style="{StaticResource ListBoxStyle}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-
-                                <!--  Participant Name  -->
-                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-
-                                <!--  Toggle Done  -->
-                                <CheckBox Grid.Column="1"
-                                          VerticalAlignment="Center"
-                                          IsChecked="{Binding Done, Mode=TwoWay}"
-                                          IsEnabled="False"
-                                          Style="{StaticResource CheckBoxStyle}" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <GroupBox Grid.RowSpan="2"
-                          Grid.Column="2"
-                          Header="Ajouter / Éditer"
-                          Style="{StaticResource GroupBoxStyle}">
-                    <StackPanel>
-                        <TextBlock FontWeight="Bold" Text="Nom :" />
-                        <TextBox Width="300" Style="{StaticResource TextBoxStyle}" />
-                        <TextBlock Margin="0,10,0,0"
-                                   FontWeight="Bold"
-                                   Text="Description :" />
-                        <TextBox Width="300"
-                                 Height="100"
-                                 AcceptsReturn="True"
-                                 Style="{StaticResource TextBoxStyle}" />
-                    </StackPanel>
-                </GroupBox>
-            </Grid>
-            <!--  Pagination Controls  -->
-            <StackPanel Grid.Row="2"
-                        Margin="0,10,0,0"
-                        HorizontalAlignment="Center"
-                        Orientation="Horizontal">
-                <ItemsControl ItemsSource="{Binding PageNumbers}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Width="32"
-                                    Height="32"
-                                    Command="{Binding DataContext.GoToPageCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    CommandParameter="{Binding}"
-                                    Content="{Binding}"
-                                    Style="{StaticResource SecondaryButtonStyle}" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
+                            <!--  Toggle Done  -->
+                            <CheckBox Grid.Column="1"
+                                      VerticalAlignment="Center"
+                                      Content="Pigé"
+                                      IsChecked="{Binding Done, Mode=TwoWay}"
+                                      IsEnabled="False"
+                                      Style="{StaticResource CheckBoxStyle}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <!--  Selected Paticipants  -->
+            <GroupBox Grid.Row="1"
+                      Grid.RowSpan="2"
+                      Grid.Column="2"
+                      Header="Éditer"
+                      Style="{StaticResource GroupBoxStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock FontWeight="Bold" Text="Nom :" />
+                    <TextBox Grid.Row="1"
+                             IsReadOnly="True"
+                             Style="{StaticResource TextBoxStyle}"
+                             Text="{Binding SelectedParticipant.Name}" />
+                    <TextBlock Grid.Row="2"
+                               Margin="0,10,0,0"
+                               FontWeight="Bold"
+                               Text="Description :" />
+                    <Label Grid.Row="3" Style="{StaticResource BodyLabel}">
+                        <TextBlock Text="{Binding SelectedParticipantDescription}" TextWrapping="Wrap" />
+                    </Label>
+                    <Grid Grid.Row="4" VerticalAlignment="Bottom">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Button Height="40"
+                                HorizontalAlignment="Stretch"
+                                Command="{Binding AddCommand}"
+                                Content="Ajouter"
+                                Style="{StaticResource PrimaryButtonStyle}" />
+                        <Button Grid.Column="1"
+                                Height="40"
+                                HorizontalAlignment="Stretch"
+                                Command="{Binding UpdateCommand}"
+                                CommandParameter="{Binding SelectedParticipant}"
+                                Content="Modifier"
+                                Style="{StaticResource SecondaryButtonStyle}" />
+                        <Button Grid.Column="2"
+                                Height="40"
+                                HorizontalAlignment="Stretch"
+                                BorderBrush="Red"
+                                Command="{Binding DeleteCommand}"
+                                CommandParameter="{Binding SelectedParticipant}"
+                                Content="Retirer"
+                                Style="{StaticResource SecondaryButtonStyle}" />
+                    </Grid>
+                </Grid>
+            </GroupBox>
         </Grid>
         <!--  Footer  -->
         <views:FooterControl Grid.Row="2">
@@ -148,26 +163,77 @@
                        Style="{StaticResource SecondaryTitleLabel}" />
             </views:FooterControl.FooterContent>
         </views:FooterControl>
-        <!--  Popup Modal  -->
-        <views:ModalPopupControl Title="Ajouter un participant"
+
+        <!--  Popup Modals  -->
+        <views:ModalPopupControl x:Name="addModalPopup"
+                                 Title="Ajouter un participant"
                                  Grid.RowSpan="3"
                                  IsInputVisible="True"
                                  IsModal="True"
-                                 IsPopupVisible="False"
+                                 IsPopupVisible="{Binding IsAddModalPopupVisible}"
                                  Message="Entrez le nom complet du participant :">
             <views:ModalPopupControl.Buttons>
                 <Button Width="75"
                         Height="30"
                         Margin="0,0,10,0"
-                        Command="{Binding OKCommand}"
+                        Command="{Binding OnAddCommand}"
+                        CommandParameter="{Binding UserInput, ElementName=addModalPopup}"
                         Content="Ajouter"
                         IsDefault="True"
                         Style="{StaticResource PrimaryButtonStyle}" />
                 <Button Width="75"
                         Height="30"
                         Margin="0"
-                        Command="{Binding CancelCommand}"
+                        Command="{Binding OnCancelCommand}"
                         Content="Annuler"
+                        IsCancel="True"
+                        Style="{StaticResource SecondaryButtonStyle}" />
+            </views:ModalPopupControl.Buttons>
+        </views:ModalPopupControl>
+        <views:ModalPopupControl x:Name="updateModalPopup"
+                                 Title="Modifier un participant"
+                                 Grid.RowSpan="3"
+                                 IsInputVisible="True"
+                                 IsModal="True"
+                                 IsPopupVisible="{Binding IsUpdateModalPopupVisible}"
+                                 Message="Entrez le nouveau nom du participant :">
+            <views:ModalPopupControl.Buttons>
+                <Button Width="75"
+                        Height="30"
+                        Margin="0,0,10,0"
+                        Command="{Binding OnUpdateCommand}"
+                        CommandParameter="{Binding UserInput, ElementName=updateModalPopup}"
+                        Content="Modifier"
+                        IsDefault="True"
+                        Style="{StaticResource PrimaryButtonStyle}" />
+                <Button Width="75"
+                        Height="30"
+                        Margin="0"
+                        Command="{Binding OnCancelCommand}"
+                        Content="Annuler"
+                        IsCancel="True"
+                        Style="{StaticResource SecondaryButtonStyle}" />
+            </views:ModalPopupControl.Buttons>
+        </views:ModalPopupControl>
+        <views:ModalPopupControl Title="Supprimer un participant"
+                                 Grid.RowSpan="3"
+                                 IsInputVisible="False"
+                                 IsModal="True"
+                                 IsPopupVisible="{Binding IsDeleteModalPopupVisible}"
+                                 Message="Êtes-vous certain de supprimer ce participant ?">
+            <views:ModalPopupControl.Buttons>
+                <Button Width="50"
+                        Height="30"
+                        Margin="0,0,10,0"
+                        Command="{Binding OnDeleteCommand}"
+                        Content="Oui"
+                        IsDefault="True"
+                        Style="{StaticResource PrimaryButtonStyle}" />
+                <Button Width="50"
+                        Height="30"
+                        Margin="0"
+                        Command="{Binding OnCancelCommand}"
+                        Content="Non"
                         IsCancel="True"
                         Style="{StaticResource SecondaryButtonStyle}" />
             </views:ModalPopupControl.Buttons>

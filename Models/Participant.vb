@@ -18,7 +18,12 @@
         ''' <summary>
         ''' Gets or sets whether the participant has been flagged as "done".
         ''' </summary>
-        Public Property Done As Boolean
+        Public Property Done As Boolean = False
+
+        ''' <summary>
+        ''' Gets or sets the participant cardinal order has been flagged as "done".
+        ''' </summary>
+        Public Property Order As Integer = -1
 
     End Class
 

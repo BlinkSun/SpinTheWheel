@@ -15,9 +15,10 @@
             <Color x:Key="BackgroundLight">#e6f2e6</Color>
             <Color x:Key="TextColor">#000000</Color>
             <Color x:Key="TextColorInverse">#FFFFFF</Color>
-            <Color x:Key="DisabledBackground">#F5F5F5</Color>
-            <Color x:Key="DisabledBorder">#D3D3D3</Color>
-            <Color x:Key="DisabledForeground">#A9A9A9</Color>
+            <Color x:Key="DisabledBackground">#E0E0E0</Color>
+            <Color x:Key="DisabledBorder">#B0B0B0</Color>
+            <Color x:Key="DisabledForeground">#7A7A7A</Color>
+
 
             <!--  Brushes  -->
             <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}" />
@@ -36,6 +37,8 @@
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+
             <vm:ViewModelLocator x:Key="ViewModelLocator" />
 
             <!--  Styles  -->
@@ -128,6 +131,13 @@
                                 <Trigger Property="IsPressed" Value="True">
                                     <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource PressedBrush}" />
                                     <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{StaticResource PressedBrush}" />
+                                </Trigger>
+                                <!--  Disabled  -->
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource DisabledBackgroundBrush}" />
+                                    <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}" />
+                                    <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
+                                    <Setter TargetName="ButtonBorder" Property="CornerRadius" Value="4" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>

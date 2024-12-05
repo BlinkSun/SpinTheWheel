@@ -7,7 +7,7 @@ Namespace Views
 
         Private Sub ParticipantsWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
             Dim viewModel As ParticipantsViewModel = TryCast(DataContext, ParticipantsViewModel)
-            viewModel?.RefreshParticipants()
+            viewModel?.LoadParticipants()
         End Sub
 
     End Class

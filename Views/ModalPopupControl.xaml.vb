@@ -135,7 +135,8 @@ Namespace Views
 
         Private Sub Backdrop_MouseDown(sender As Object, e As MouseButtonEventArgs)
             If Not IsModal Then
-                IsPopupVisible = False
+                Visibility = Visibility.Hidden
+                'SetValue(IsPopupVisibleProperty, False)
             End If
         End Sub
 
@@ -147,7 +148,8 @@ Namespace Views
                 If IsInputVisible AndAlso String.IsNullOrWhiteSpace(UserInput) Then
                     PopupInput.BorderBrush = PopupInputInvalideColor
                 Else
-                    IsPopupVisible = False
+                    Visibility = Visibility.Hidden
+                    'SetValue(IsPopupVisibleProperty, False)
                 End If
                 e.Handled = True
             End If
@@ -166,13 +168,14 @@ Namespace Views
                                 Return
                             End If
                         End If
-                        DialogResult = True
+                        SetValue(DialogResultProperty, True)
                     ElseIf button.IsCancel Then
-                        DialogResult = False
+                        SetValue(DialogResultProperty, False)
                     End If
                 End If
             End If
-            IsPopupVisible = False
+            Visibility = Visibility.Hidden
+            'SetValue(IsPopupVisibleProperty, False)
             e.Handled = True
         End Sub
 

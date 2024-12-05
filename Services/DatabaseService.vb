@@ -1,6 +1,7 @@
 ﻿Imports System.Data.SQLite
 Imports System.IO
 Imports SpinTheWheel.Models
+Imports SpinTheWheel.ViewModels
 
 Namespace Services
 
@@ -31,7 +32,8 @@ Namespace Services
                         CREATE TABLE IF NOT EXISTS Participant (
                             Id INTEGER PRIMARY KEY AUTOINCREMENT,
                             Name TEXT NOT NULL,
-                            Done INTEGER NOT NULL
+                            Done INTEGER DEFAULT 0 NOT NULL,
+                            ""Order"" INTEGER DEFAULT -1 NOT NULL
                         );"
                     Using command As New SQLiteCommand(createTableQuery, connection)
                         command.ExecuteNonQuery()
@@ -59,15 +61,17 @@ Namespace Services
             Try
                 Using connection As SQLiteConnection = GetConnection()
                     connection.Open()
-                    Dim selectQuery As String = "SELECT Id, Name, Done FROM Participant;"
+                    ' Corrected SQL query with proper escaping for Order keyword
+                    Dim selectQuery As String = "SELECT Id, Name, Done, ""Order"" FROM Participant ORDER BY Done DESC, ""Order"" ASC;"
                     Using command As New SQLiteCommand(selectQuery, connection)
                         Using reader As SQLiteDataReader = command.ExecuteReader()
                             While reader.Read()
                                 participants.Add(New Participant() With {
-                                    .Id = reader.GetInt32(0),
-                                    .Name = reader.GetString(1),
-                                    .Done = reader.GetBoolean(2)
-                                })
+                            .Id = reader.GetInt32(0),
+                            .Name = reader.GetString(1),
+                            .Done = reader.GetBoolean(2),
+                            .Order = reader.GetInt32(3) ' Ensure Order is retrieved correctly
+                        })
                             End While
                         End Using
                     End Using
@@ -78,6 +82,7 @@ Namespace Services
             Return participants
         End Function
 
+
         ''' <summary>
         ''' Adds a new participant to the database.
         ''' </summary>
@@ -86,10 +91,9 @@ Namespace Services
             Try
                 Using connection As SQLiteConnection = GetConnection()
                     connection.Open()
-                    Dim insertQuery As String = "INSERT INTO Participant (Name, Done) VALUES (@Name, @Done);"
+                    Dim insertQuery As String = "INSERT INTO Participant (Name) VALUES (@Name);"
                     Using command As New SQLiteCommand(insertQuery, connection)
                         command.Parameters.AddWithValue("@Name", participant.Name)
-                        command.Parameters.AddWithValue("@Done", participant.Done)
                         command.ExecuteNonQuery()
                     End Using
                 End Using
@@ -106,11 +110,12 @@ Namespace Services
             Try
                 Using connection As SQLiteConnection = GetConnection()
                     connection.Open()
-                    Dim updateQuery As String = "UPDATE Participant SET Name = @Name, Done = @Done WHERE Id = @Id;"
+                    Dim updateQuery As String = "UPDATE Participant SET Name = @Name, Done = @Done, ""Order"" = @Order WHERE Id = @Id;"
                     Using command As New SQLiteCommand(updateQuery, connection)
                         command.Parameters.AddWithValue("@Id", participant.Id)
                         command.Parameters.AddWithValue("@Name", participant.Name)
                         command.Parameters.AddWithValue("@Done", participant.Done)
+                        command.Parameters.AddWithValue("@Order", participant.Order)
                         command.ExecuteNonQuery()
                     End Using
                 End Using
@@ -122,19 +127,19 @@ Namespace Services
         ''' <summary>
         ''' Deletes a participant from the database.
         ''' </summary>
-        ''' <param name="id">The ID of the participant to delete.</param>
-        Public Sub DeleteParticipant(id As Integer)
+        ''' <param name="participant">The participant to delete.</param>
+        Public Sub DeleteParticipant(participant As Participant)
             Try
                 Using connection As SQLiteConnection = GetConnection()
                     connection.Open()
                     Dim deleteQuery As String = "DELETE FROM Participant WHERE Id = @Id;"
                     Using command As New SQLiteCommand(deleteQuery, connection)
-                        command.Parameters.AddWithValue("@Id", id)
+                        command.Parameters.AddWithValue("@Id", participant.Id)
                         command.ExecuteNonQuery()
                     End Using
                 End Using
             Catch ex As Exception
-                Throw New ApplicationException($"Error deleting participant with ID {id}: {ex.Message}", ex)
+                Throw New ApplicationException($"Error deleting participant with ID {participant.Id}: {ex.Message}", ex)
             End Try
         End Sub
 
@@ -158,7 +163,8 @@ Namespace Services
                                 Return New Participant() With {
                                     .Id = reader.GetInt32(0),
                                     .Name = reader.GetString(1),
-                                    .Done = reader.GetBoolean(2)
+                                    .Done = reader.GetBoolean(2),
+                                    .Order = reader.GetInt32(3)
                                 }
                             End If
                         End Using
@@ -168,6 +174,25 @@ Namespace Services
                 Throw New ApplicationException($"Error retrieving random participant: {ex.Message}", ex)
             End Try
             Return Nothing
+        End Function
+
+        ''' <summary>
+        ''' Retrieves the next available number for the "Order" column.
+        ''' </summary>
+        ''' <returns>The next integer value for the "Order" column.</returns>
+        Public Function GetNextOrderValue() As Integer
+            Try
+                Using connection As SQLiteConnection = GetConnection()
+                    connection.Open()
+                    Dim query As String = "SELECT COALESCE(MAX(""Order""), 0) FROM Participant WHERE Done = 1;"
+                    Using command As New SQLiteCommand(query, connection)
+                        Dim maxOrder As Integer = Convert.ToInt32(command.ExecuteScalar())
+                        Return maxOrder + 1
+                    End Using
+                End Using
+            Catch ex As Exception
+                Throw New ApplicationException($"Error retrieving the next order value: {ex.Message}", ex)
+            End Try
         End Function
 
     End Class
