@@ -164,7 +164,6 @@ Namespace ViewModels
                 Dim midX As Double = centerX + (Radius / 2 * Math.Cos(midAngle * Math.PI / 180.0))
                 Dim midY As Double = centerY - (Radius / 2 * Math.Sin(midAngle * Math.PI / 180.0))
 
-                'Segment
                 Dim path As New Path() With {
                     .Fill = If(i Mod 2 = 0, New SolidColorBrush(ColorConverter.ConvertFromString("#00874e")), Brushes.White),
                     .Stroke = New SolidColorBrush(ColorConverter.ConvertFromString("#03673e")),
@@ -181,41 +180,6 @@ Namespace ViewModels
                 path.Data = geometry
 
                 Segments.Add(path)
-
-                'Image
-                'Dim image As New Image With {
-                '    .Width = 100,
-                '    .Height = 20,
-                '    .Stretch = Stretch.UniformToFill,
-                '    .Source = New BitmapImage(New Uri("pack://application:,,,/Assets/logo.png"))
-                '}
-
-                'Dim rotateTransform As New RotateTransform(-midAngle, 0.5, 0.5)
-                'image.RenderTransform = rotateTransform
-
-                'Canvas.SetLeft(image, midX)
-                'Canvas.SetTop(image, midY)
-
-                'Segments.Add(image)
-                'Dim image As New Image With {
-                '    .Width = 100,
-                '    .Height = 20,
-                '    .Stretch = Stretch.Fill,
-                '    .Source = New BitmapImage(New Uri("pack://application:,,,/Assets/logo.png"))
-                '}
-
-                '' Positionnement initial (mi-distance entre le centre et le bord)
-                'Dim imageX As Double = centerX + (Radius / 3) ' * Math.Cos(midAngle * Math.PI / 180.0)
-                'Dim imageY As Double = centerY - (image.Height / 2) ' * Math.Sin(midAngle * Math.PI / 180.0)
-
-                'Canvas.SetLeft(image, imageX) ' - (image.Width / 2))
-                'Canvas.SetTop(image, imageY) ' - (image.Height / 2))
-
-                '' Rotation autour du centre du cercle
-                'Dim rotateTransform As New RotateTransform(-midAngle, -(Radius / 3), -0.5)
-                'image.RenderTransform = rotateTransform
-
-                'Segments.Add(image)
             Next
         End Sub
 
@@ -257,7 +221,7 @@ Namespace ViewModels
                 If randomParticipant IsNot Nothing Then
                     WinnerName = randomParticipant.Name ' Met à jour le nom du gagnant
                     IsWinnerVisible = True ' Affiche le gagnant
-                    Await Task.Delay(5000) ' Attend 5 secondes avant de masquer
+                    Await Task.Delay(10000) ' Attend 10 secondes avant de masquer
                     IsWinnerVisible = False ' Cache le gagnant après l'animation
                 Else
                     ErrorService.ShowWarning("No participants are available to select.")
