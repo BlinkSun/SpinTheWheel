@@ -4,7 +4,7 @@
              xmlns:converters="clr-namespace:SpinTheWheel.Converters"
              xmlns:local="clr-namespace:SpinTheWheel"
              xmlns:vm="clr-namespace:SpinTheWheel.ViewModels"
-             StartupUri="Views/ParticipantsWindow.xaml">
+             StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <!--  Colors  -->
@@ -18,7 +18,6 @@
             <Color x:Key="DisabledBackground">#E0E0E0</Color>
             <Color x:Key="DisabledBorder">#B0B0B0</Color>
             <Color x:Key="DisabledForeground">#7A7A7A</Color>
-
 
             <!--  Brushes  -->
             <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}" />
@@ -249,8 +248,8 @@
                         <ControlTemplate TargetType="CheckBox">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Border x:Name="CheckBoxBorder"
                                         Width="20"
@@ -449,6 +448,13 @@
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter TargetName="SwitchBackground" Property="BorderBrush" Value="#03673e" />
+                                </Trigger>
+                                <!--  Disabled State  -->
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="SwitchBackground" Property="Background" Value="{StaticResource DisabledBackgroundBrush}" />
+                                    <Setter TargetName="SwitchBackground" Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}" />
+                                    <Setter TargetName="SwitchThumb" Property="Fill" Value="{StaticResource DisabledForegroundBrush}" />
+                                    <Setter TargetName="SwitchThumb" Property="Stroke" Value="{StaticResource DisabledBorderBrush}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>

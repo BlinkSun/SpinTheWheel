@@ -17,19 +17,21 @@ Namespace ViewModels
         Private ReadOnly databaseService As DatabaseService
 
         ''' <summary>
+        ''' Collection of segment angles for the wheel.
+        ''' </summary>
+        Public ReadOnly Property Segments As ObservableCollection(Of UIElement)
+        ''' <summary>
         ''' Command to spin the wheel.
         ''' </summary>
-        Public ReadOnly Property SpinWheelCommand As ICommand
-
+        Public ReadOnly Property SpinWheelCommand As RelayCommand
         ''' <summary>
         ''' Command to open the participants manager window.
         ''' </summary>
-        Public ReadOnly Property OpenParticipantsManagerCommand As ICommand
+        Public ReadOnly Property OpenParticipantsManagerCommand As RelayCommand
 
         ''' <summary>
         ''' The participant currently selected by the wheel.
         ''' </summary>
-        Private selectedParticipantValue As Participant
         Public Property SelectedParticipant As Participant
             Get
                 Return selectedParticipantValue
@@ -39,11 +41,11 @@ Namespace ViewModels
                 OnPropertyChanged(NameOf(SelectedParticipant))
             End Set
         End Property
+        Private selectedParticipantValue As Participant
 
         ''' <summary>
         ''' Indicates whether the wheel is currently spinning.
         ''' </summary>
-        Private isSpinningValue As Boolean
         Public Property IsSpinning As Boolean
             Get
                 Return isSpinningValue
@@ -53,11 +55,11 @@ Namespace ViewModels
                 OnPropertyChanged(NameOf(IsSpinning))
             End Set
         End Property
+        Private isSpinningValue As Boolean
 
         ''' <summary>
         ''' Current rotation angle of the wheel.
         ''' </summary>
-        Private spinAngleValue As Double
         Public Property SpinAngle As Double
             Get
                 Return spinAngleValue
@@ -67,12 +69,12 @@ Namespace ViewModels
                 OnPropertyChanged(NameOf(SpinAngle))
             End Set
         End Property
+        Private spinAngleValue As Double
 
         ''' <summary>
         ''' Duration of the wheel spin animation in milliseconds.
         ''' Controlled by a Slider in the UI.
         ''' </summary>
-        Private spinDurationValue As Integer = 2000 ' Default value: 2 seconds
         Public Property SpinDuration As Integer
             Get
                 Return spinDurationValue
@@ -82,31 +84,11 @@ Namespace ViewModels
                 OnPropertyChanged(NameOf(SpinDuration))
             End Set
         End Property
+        Private spinDurationValue As Integer = 2000 ' Default value: 2 seconds
 
         ''' <summary>
         ''' Number of segments in the wheel.
         ''' </summary>
-        Private numberOfSegmentsValue As Integer = 6 ' Default: 6 segments
-        Public Property NumberOfSegments As Integer
-            Get
-                Return numberOfSegmentsValue
-            End Get
-            Set(value As Integer)
-                numberOfSegmentsValue = value
-                GenerateSegments()
-                OnPropertyChanged(NameOf(NumberOfSegments))
-            End Set
-        End Property
-
-        ''' <summary>
-        ''' Collection of segment angles for the wheel.
-        ''' </summary>
-        Public Property Segments As ObservableCollection(Of UIElement)
-
-        ''' <summary>
-        ''' Nombre de segments dans la roue.
-        ''' </summary>
-        Private segmentCountValue As Integer = 16
         Public Property SegmentCount As Integer
             Get
                 Return segmentCountValue
@@ -117,11 +99,49 @@ Namespace ViewModels
                 OnPropertyChanged(NameOf(SegmentCount))
             End Set
         End Property
+        Private segmentCountValue As Integer = 16 ' Default: 16 segments
+
+        Public Property WinnerName As String
+            Get
+                Return winnerNameValue
+            End Get
+            Set(value As String)
+                winnerNameValue = value
+                OnPropertyChanged(NameOf(WinnerName))
+            End Set
+        End Property
+        Private winnerNameValue As String
+
+        Public Property IsWinnerVisible As Boolean
+            Get
+                Return isWinnerVisibleValue
+            End Get
+            Set(value As Boolean)
+                isWinnerVisibleValue = value
+                OnPropertyChanged(NameOf(IsWinnerVisible))
+            End Set
+        End Property
+        Private isWinnerVisibleValue As Boolean
 
         ''' <summary>
-        ''' Rayon de la roue.
+        ''' Radius of the wheel.
         ''' </summary>
         Private Const Radius As Double = 300.0
+
+        ''' <summary>
+        ''' Constructor for MainViewModel.
+        ''' </summary>
+        ''' <param name="dbService">The shared DatabaseService instance.</param>
+        Public Sub New(dbService As DatabaseService)
+            ArgumentNullException.ThrowIfNull(dbService)
+
+            databaseService = dbService
+            Segments = New ObservableCollection(Of UIElement)()
+            SpinWheelCommand = New RelayCommand(AddressOf SpinWheel, Function() Not IsSpinning)
+            OpenParticipantsManagerCommand = New RelayCommand(AddressOf OpenParticipantsManager)
+
+            GenerateSegments()
+        End Sub
 
         ''' <summary>
         ''' Generates the segments based on the current number of segments.
@@ -199,21 +219,6 @@ Namespace ViewModels
             Next
         End Sub
 
-
-        ''' <summary>
-        ''' Constructor for MainViewModel.
-        ''' </summary>
-        ''' <param name="dbService">The shared DatabaseService instance.</param>
-        Public Sub New(dbService As DatabaseService)
-            ArgumentNullException.ThrowIfNull(dbService)
-
-            databaseService = dbService
-            SpinWheelCommand = New RelayCommand(AddressOf SpinWheel, Function() Not IsSpinning)
-            OpenParticipantsManagerCommand = New RelayCommand(AddressOf OpenParticipantsManager)
-            Segments = New ObservableCollection(Of UIElement)()
-            GenerateSegments()
-        End Sub
-
         ''' <summary>
         ''' Spins the wheel with an animation and selects a random participant.
         ''' </summary>
@@ -250,7 +255,10 @@ Namespace ViewModels
                 ' Sélectionner un participant aléatoire après l'animation
                 Dim randomParticipant = databaseService.GetRandomParticipant()
                 If randomParticipant IsNot Nothing Then
-                    SelectedParticipant = randomParticipant
+                    WinnerName = randomParticipant.Name ' Met à jour le nom du gagnant
+                    IsWinnerVisible = True ' Affiche le gagnant
+                    Await Task.Delay(5000) ' Attend 5 secondes avant de masquer
+                    IsWinnerVisible = False ' Cache le gagnant après l'animation
                 Else
                     ErrorService.ShowWarning("No participants are available to select.")
                 End If
@@ -267,11 +275,11 @@ Namespace ViewModels
         Private Sub OpenParticipantsManager()
             Try
                 Dim participantsWindow As New ParticipantsWindow With {
-                    .Owner = Application.Current.MainWindow
+                    .Owner = Application.Current.MainWindow,
+                    .WindowStartupLocation = WindowStartupLocation.CenterScreen
                 }
                 participantsWindow.ShowDialog()
 
-                ' Clear the current selection after the manager window is closed
                 SelectedParticipant = Nothing
             Catch ex As Exception
                 ErrorService.ShowError($"An error occurred while opening the participants manager: {ex.Message}")

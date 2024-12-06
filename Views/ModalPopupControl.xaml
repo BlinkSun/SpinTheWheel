@@ -59,9 +59,9 @@
                 <TextBox x:Name="PopupInput"
                          Grid.Row="2"
                          Margin="0,10,0,10"
-                         TextChanged="PopupInput_TextChanged"
                          Style="{StaticResource TextBoxStyle}"
                          Text="{Binding UserInput, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"
+                         TextChanged="PopupInput_TextChanged"
                          Visibility="{Binding IsInputVisible, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <!--  Buttons  -->

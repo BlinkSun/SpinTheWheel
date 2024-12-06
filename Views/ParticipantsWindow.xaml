@@ -1,4 +1,4 @@
-﻿<Window x:Class="Views.ParticipantsWindow" Title="Gestion des Participants"
+﻿<Window x:Class="Views.ParticipantsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SpinTheWheel"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:SpinTheWheel.Views"
+        Title="Gestion des Participants"
         Width="900"
         Height="650"
         DataContext="{Binding ParticipantsViewModel, Source={StaticResource ViewModelLocator}}"
@@ -28,7 +29,7 @@
                            Style="{StaticResource PrimaryTitleLabel}" />
                     <Label Margin="0,0,0,5"
                            Content="{Binding Participants.Count}"
-                           ContentStringFormat="Total de {0} participants"
+                           ContentStringFormat="Total de {0} participants."
                            Foreground="White"
                            Style="{StaticResource SecondaryTitleLabel}" />
                 </StackPanel>
@@ -72,7 +73,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     BorderBrush="Red"
-                    Command="{Binding DeleteAllCommand}"
+                    Command="{Binding ClearCommand}"
                     Content="Effacer tout"
                     Style="{StaticResource SecondaryButtonStyle}"
                     ToolTip="Supprimer tous les participants de la liste." />
@@ -82,7 +83,9 @@
                      ItemsSource="{Binding FilteredParticipants}"
                      SelectedItem="{Binding SelectedParticipant}"
                      SelectionMode="Single"
-                     Style="{StaticResource ListBoxStyle}">
+                     Style="{StaticResource ListBoxStyle}"
+                     VirtualizingPanel.IsVirtualizing="True"
+                     VirtualizingPanel.VirtualizationMode="Recycling">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -101,6 +104,7 @@
                                       IsChecked="{Binding Done, Mode=TwoWay}"
                                       IsEnabled="False"
                                       Style="{StaticResource CheckBoxStyle}" />
+
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -135,18 +139,35 @@
                             <TextBlock Text="{Binding SelectedParticipantDescription}" TextWrapping="Wrap" />
                         </Label>
                         <Grid Grid.Row="4" VerticalAlignment="Bottom">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <Button Height="40"
+                            <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal">
+                                <ToggleButton Margin="10,0,10,0"
+                                              VerticalAlignment="Center"
+                                              Command="{Binding UpdateDoneCommand}"
+                                              CommandParameter="{Binding SelectedParticipant}"
+                                              IsChecked="{Binding SelectedParticipant.Done}"
+                                              Style="{StaticResource ToggleSwitchStyle}" />
+                                <TextBlock VerticalAlignment="Center"
+                                           FontWeight="Bold"
+                                           Text="Tiré" />
+                            </StackPanel>
+                            <Button Grid.Row="1"
+                                    Height="40"
                                     HorizontalAlignment="Stretch"
                                     Command="{Binding AddCommand}"
                                     Content="Ajouter"
                                     Style="{StaticResource PrimaryButtonStyle}"
                                     ToolTip="Ajouter un participant." />
-                            <Button Grid.Column="1"
+                            <Button Grid.Row="1"
+                                    Grid.Column="1"
                                     Height="40"
                                     HorizontalAlignment="Stretch"
                                     Command="{Binding UpdateCommand}"
@@ -154,7 +175,8 @@
                                     Content="Modifier"
                                     Style="{StaticResource SecondaryButtonStyle}"
                                     ToolTip="Modifier un participant." />
-                            <Button Grid.Column="2"
+                            <Button Grid.Row="1"
+                                    Grid.Column="2"
                                     Height="40"
                                     HorizontalAlignment="Stretch"
                                     BorderBrush="Red"
@@ -167,13 +189,13 @@
                     </Grid>
                 </GroupBox>
                 <Button Grid.Row="1"
-                        Height="40"
                         Width="110"
+                        Height="40"
                         HorizontalAlignment="Left"
-                        Command="{Binding UpdateAllCommand}"
+                        Command="{Binding ResetCommand}"
                         Content="Réinitialiser"
                         Style="{StaticResource PrimaryButtonStyle}"
-                        ToolTip="Réinitialiser le tirage, signifie que les participants redeviennent non pigés." />
+                        ToolTip="Réinitialiser le tirage, signifie que les participants redeviennent non tirés." />
             </Grid>
         </Grid>
         <!--  Footer  -->

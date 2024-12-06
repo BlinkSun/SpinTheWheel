@@ -57,22 +57,17 @@ Namespace ViewModels
             Set(value As Participant)
                 selectedParticipantValue = value
                 OnPropertyChanged(NameOf(SelectedParticipant))
-                If SelectedParticipant IsNot Nothing Then
-                    If SelectedParticipant.Done Then
-                        SelectedParticipantDescription = $"Ce participant a déjà été tiré au sort. Il est le gagant du tirage numéro {SelectedParticipant.Order}."
-                    Else
-                        SelectedParticipantDescription = "Ce participant fait toujours parti du tirage. Il n'a pas encore été tiré au sort."
-                    End If
-                End If
+                UpdateParticipantDescription()
             End Set
         End Property
         Private selectedParticipantValue As Participant
 
         Public ReadOnly Property AddCommand As RelayCommand
         Public ReadOnly Property UpdateCommand As RelayCommand(Of Participant)
-        Public ReadOnly Property UpdateAllCommand As RelayCommand
+        Public ReadOnly Property ResetCommand As RelayCommand
+        Public ReadOnly Property UpdateDoneCommand As RelayCommand(Of Participant)
         Public ReadOnly Property DeleteCommand As RelayCommand(Of Participant)
-        Public ReadOnly Property DeleteAllCommand As RelayCommand
+        Public ReadOnly Property ClearCommand As RelayCommand
         Public ReadOnly Property ApplyFilterCommand As RelayCommand
         Public ReadOnly Property ImportParticipantsCommand As RelayCommand
 
@@ -84,9 +79,10 @@ Namespace ViewModels
 
             AddCommand = New RelayCommand(AddressOf AddParticipant)
             UpdateCommand = New RelayCommand(Of Participant)(AddressOf UpdateParticipant, Function() SelectedParticipant IsNot Nothing)
-            UpdateAllCommand = New RelayCommand(AddressOf UpdateParticipants)
+            ResetCommand = New RelayCommand(AddressOf ResetParticipants)
+            UpdateDoneCommand = New RelayCommand(Of Participant)(AddressOf UpdateParticipantDone, Function() SelectedParticipant IsNot Nothing)
             DeleteCommand = New RelayCommand(Of Participant)(AddressOf DeleteParticipant, Function() SelectedParticipant IsNot Nothing)
-            DeleteAllCommand = New RelayCommand(AddressOf DeleteParticipants)
+            ClearCommand = New RelayCommand(AddressOf ClearParticipants)
             ApplyFilterCommand = New RelayCommand(AddressOf ApplyFilter)
             ImportParticipantsCommand = New RelayCommand(AddressOf ImportParticipants)
 
@@ -108,6 +104,7 @@ Namespace ViewModels
 
         Private Sub AddParticipant()
             Try
+                SelectedParticipant = Nothing
                 Dim name As String = InputBox("Entrez le nom de ce nouveau participant :", "Ajouter Participant")
                 If Not String.IsNullOrWhiteSpace(name) Then
                     Dim newParticipant = New Participant() With {
@@ -115,6 +112,7 @@ Namespace ViewModels
                     }
                     databaseService.AddParticipant(newParticipant)
                     Participants.Add(newParticipant)
+                    SelectedParticipant = newParticipant
                     ApplyFilter()
                 End If
             Catch ex As Exception
@@ -135,11 +133,37 @@ Namespace ViewModels
                 ErrorService.ShowError($"Erreur lors de la mise à jour du participant : {ex.Message}")
             End Try
         End Sub
-        Private Sub UpdateParticipants()
+        Private Sub UpdateParticipantDone()
             Try
-                If MessageBox.Show("Tous les participants seront réinitialisés à l'état non pigé. Voulez-vous continuer ?", "Réinitialiser le tirage.", MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
+                If SelectedParticipant IsNot Nothing Then
+                    If SelectedParticipant.Done Then
+                        Dim order As Integer = databaseService.GetNextOrderValue()
+                        SelectedParticipant.Order = order
+                    Else
+                        SelectedParticipant.Order = -1
+                    End If
+                    databaseService.UpdateParticipant(SelectedParticipant)
+                    UpdateParticipantDescription()
+                    ApplyFilter()
+                End If
+            Catch ex As Exception
+                ErrorService.ShowError($"Erreur lors de la mise à jour du participant : {ex.Message}")
+            End Try
+        End Sub
+        Private Sub UpdateParticipantDescription()
+            If SelectedParticipant IsNot Nothing Then
+                If SelectedParticipant.Done Then
+                    SelectedParticipantDescription = $"Ce participant a déjà été tiré au sort. Il est le gagant du tirage numéro {SelectedParticipant.Order}."
+                Else
+                    SelectedParticipantDescription = "Ce participant fait toujours parti du tirage. Il n'a pas encore été tiré au sort."
+                End If
+            End If
+        End Sub
+        Private Sub ResetParticipants()
+            Try
+                If MessageBox.Show("Tous les participants seront réinitialisés à l'état non tiré. Voulez-vous continuer ?", "Réinitialiser le tirage.", MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
                     SelectedParticipant = Nothing
-                    databaseService.UpdateParticipants()
+                    databaseService.ResetParticipants()
                     GetParticipants()
                 End If
             Catch ex As Exception
@@ -160,12 +184,13 @@ Namespace ViewModels
                 ErrorService.ShowError($"Erreur lors de la suppression du participant : {ex.Message}")
             End Try
         End Sub
-        Private Sub DeleteParticipants()
+        Private Sub ClearParticipants()
             Try
                 If MessageBox.Show("Êtes-vous sûr de vouloir effacer tous les participants de la liste ?" & vbCrLf & "Cette action est irréversible.", "Suppression de tous les participants", MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
                     SelectedParticipant = Nothing
-                    databaseService.DeleteParticipants()
-                    GetParticipants()
+                    databaseService.ClearParticipants()
+                    Participants.Clear()
+                    ApplyFilter()
                 End If
             Catch ex As Exception
                 ErrorService.ShowError($"Erreur lors de la suppression du participant : {ex.Message}")
@@ -176,6 +201,7 @@ Namespace ViewModels
             Dim filteredList As List(Of Participant) = If(String.IsNullOrWhiteSpace(FilterText),
                                   Participants.ToList,
                                   Participants.Where(Function(p) p.Name.Contains(FilterText, StringComparison.OrdinalIgnoreCase)).ToList())
+            filteredList = filteredList.OrderByDescending(Function(p) p.Done).ThenBy(Function(p) p.Order).ToList()
             FilteredParticipants = New ObservableCollection(Of Participant)(filteredList)
             OnPropertyChanged(NameOf(FilteredParticipants))
         End Sub

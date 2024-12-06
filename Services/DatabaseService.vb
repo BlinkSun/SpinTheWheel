@@ -61,17 +61,16 @@ Namespace Services
             Try
                 Using connection As SQLiteConnection = GetConnection()
                     connection.Open()
-                    ' Corrected SQL query with proper escaping for Order keyword
                     Dim selectQuery As String = "SELECT Id, Name, Done, ""Order"" FROM Participant ORDER BY Done DESC, ""Order"" ASC;"
                     Using command As New SQLiteCommand(selectQuery, connection)
                         Using reader As SQLiteDataReader = command.ExecuteReader()
                             While reader.Read()
                                 participants.Add(New Participant() With {
-                            .Id = reader.GetInt32(0),
-                            .Name = reader.GetString(1),
-                            .Done = reader.GetBoolean(2),
-                            .Order = reader.GetInt32(3) ' Ensure Order is retrieved correctly
-                        })
+                                    .Id = reader.GetInt32(0),
+                                    .Name = reader.GetString(1),
+                                    .Done = reader.GetBoolean(2),
+                                    .Order = reader.GetInt32(3)
+                                })
                             End While
                         End Using
                     End Using
@@ -84,7 +83,7 @@ Namespace Services
 
 
         ''' <summary>
-        ''' Adds a new participant to the database.
+        ''' Adds a new participant to the database and updates its properties with the generated values.
         ''' </summary>
         ''' <param name="participant">The participant to add.</param>
         Public Sub AddParticipant(participant As Participant)
@@ -92,15 +91,23 @@ Namespace Services
                 Using connection As SQLiteConnection = GetConnection()
                     connection.Open()
                     Dim insertQuery As String = "INSERT INTO Participant (Name) VALUES (@Name);"
+
                     Using command As New SQLiteCommand(insertQuery, connection)
                         command.Parameters.AddWithValue("@Name", participant.Name)
                         command.ExecuteNonQuery()
+                    End Using
+
+                    Dim selectQuery As String = "SELECT last_insert_rowid();"
+                    Using command As New SQLiteCommand(selectQuery, connection)
+                        Dim newId As Long = Convert.ToInt32(command.ExecuteScalar())
+                        participant.Id = newId
                     End Using
                 End Using
             Catch ex As Exception
                 Throw New ApplicationException($"Error adding participant: {ex.Message}", ex)
             End Try
         End Sub
+
 
         ''' <summary>
         ''' Updates an existing participant in the database.
@@ -127,7 +134,7 @@ Namespace Services
         ''' <summary>
         ''' Reset flags of all participants in the database.
         ''' </summary>
-        Public Sub UpdateParticipants()
+        Public Sub ResetParticipants()
             Try
                 Using connection As SQLiteConnection = GetConnection()
                     connection.Open()
@@ -163,7 +170,7 @@ Namespace Services
         ''' <summary>
         ''' Deletes all participants from the database.
         ''' </summary>
-        Public Sub DeleteParticipants()
+        Public Sub ClearParticipants()
             Try
                 Using connection As SQLiteConnection = GetConnection()
                     connection.Open()
@@ -185,20 +192,18 @@ Namespace Services
             Try
                 Using connection As SQLiteConnection = GetConnection()
                     connection.Open()
-                    Dim randomQuery As String = "
-                        SELECT Id, Name, Done 
-                        FROM Participant 
-                        WHERE Done = 0 
-                        ORDER BY RANDOM() 
-                        LIMIT 1;"
+                    Dim randomQuery As String = " SELECT Id, Name, Done 
+                                                    FROM Participant 
+                                                    WHERE Done = 0 
+                                                    ORDER BY RANDOM() 
+                                                    LIMIT 1;"
                     Using command As New SQLiteCommand(randomQuery, connection)
                         Using reader As SQLiteDataReader = command.ExecuteReader()
                             If reader.Read() Then
                                 Return New Participant() With {
                                     .Id = reader.GetInt32(0),
                                     .Name = reader.GetString(1),
-                                    .Done = reader.GetBoolean(2),
-                                    .Order = reader.GetInt32(3)
+                                    .Done = reader.GetBoolean(2)
                                 }
                             End If
                         End Using

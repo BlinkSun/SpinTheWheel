@@ -1,16 +1,18 @@
-﻿<Window x:Class="Views.MainWindow" Title="MainWindow"
+﻿<Window x:Class="Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:SpinTheWheel"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:SpinTheWheel.Views"
-        Width="900"
-        Height="750"
+        Title="Spin The Wheel"
+        Width="800"
+        Height="800"
         DataContext="{Binding MainViewModel, Source={StaticResource ViewModelLocator}}"
+        KeyDown="Window_KeyDown"
         mc:Ignorable="d">
     <Window.Resources>
-        <!--  Round Button  -->
+        <!--  Round Spin Button  -->
         <Style x:Key="RoundButtonStyle" TargetType="Button">
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Background" Value="White" />
@@ -52,158 +54,253 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <!--  Header  -->
-        <views:HeaderControl Grid.Row="0">
+        <views:HeaderControl>
             <views:HeaderControl.HeaderContent>
-                <StackPanel Margin="10"
+                <Grid>
+                    <StackPanel Margin="10"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                        <Label Margin="0,0,5,0"
+                               Content="Tirage au Sort"
+                               Foreground="White"
+                               Style="{StaticResource PrimaryTitleLabel}" />
+                        <Label Margin="0,0,0,5"
+                               Content="Faites tourner la roue pour connaitre le prochain gagnant !"
+                               Foreground="White"
+                               Style="{StaticResource SecondaryTitleLabel}" />
+                    </StackPanel>
+                    <Button Width="120"
+                            Height="40"
+                            HorizontalAlignment="Right"
                             VerticalAlignment="Center"
-                            Orientation="Vertical">
-                    <Label Margin="0,0,5,0"
-                           Content="Gestionnaire des Participants."
-                           Foreground="White"
-                           Style="{StaticResource PrimaryTitleLabel}" />
-                    <Label Margin="0,0,0,5"
-                           Content="{Binding Participants.Count}"
-                           ContentStringFormat="Total de {0} participants"
-                           Foreground="White"
-                           Style="{StaticResource SecondaryTitleLabel}" />
-                </StackPanel>
+                            Command="{Binding OpenParticipantsManagerCommand}"
+                            Content="Participants"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            ToolTip="Ouvrir le gestionnaire des participants." />
+                </Grid>
             </views:HeaderControl.HeaderContent>
         </views:HeaderControl>
-        <Button Width="120"
-                Height="30"
-                Margin="10"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Command="{Binding OpenParticipantsManagerCommand}"
-                Content="Gestion Participants"
-                Style="{StaticResource SecondaryButtonStyle}"
-                ToolTip="Ouvrir le gestionnaire de Participants." />
-        <Button Width="200"
-                Height="50"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Bottom"
-                Click="OnLaunchConfettiClick"
-                Content="Launch Confetti" />
-        <!--  Wheel Placeholder  -->
-        <Grid Grid.Row="1">
-            <Canvas Name="ConfettiCanvas"
-                    Width="600"
-                    Height="600"
+        <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+            <Button Width="50"
+                    Height="50"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-                <!--  Rotate Transform for the Entire Wheel  -->
-                <Canvas.RenderTransform>
-                    <RotateTransform Angle="{Binding SpinAngle}" CenterX="300" CenterY="300" />
-                </Canvas.RenderTransform>
-
-                <!--<Path Data="M200,200 L200,0 A200,200 0 0,1 341.42,58.58 Z"
-                      Fill="#00874e"
-                      Stroke="#03673e"
-                      StrokeThickness="3" />
-                <Path Data="M200,200 L341.42,58.58 A200,200 0 0,1 400,200 Z"
-                      Fill="White"
-                      Stroke="#03673e"
-                      StrokeThickness="3" />
-                <Path Data="M200,200 L400,200 A200,200 0 0,1 341.42,341.42 Z"
-                      Fill="#00874e"
-                      Stroke="#03673e"
-                      StrokeThickness="3" />
-                <Path Data="M200,200 L341.42,341.42 A200,200 0 0,1 200,400 Z"
-                      Fill="White"
-                      Stroke="#03673e"
-                      StrokeThickness="3" />
-                <Path Data="M200,200 L200,400 A200,200 0 0,1 58.58,341.42 Z"
-                      Fill="#00874e"
-                      Stroke="#03673e"
-                      StrokeThickness="3" />
-                <Path Data="M200,200 L58.58,341.42 A200,200 0 0,1 0,200 Z"
-                      Fill="White"
-                      Stroke="#03673e"
-                      StrokeThickness="3" />
-                <Path Data="M200,200 L0,200 A200,200 0 0,1 58.58,58.58 Z"
-                      Fill="#00874e"
-                      Stroke="#03673e"
-                      StrokeThickness="3" />
-                <Path Data="M200,200 L58.58,58.58 A200,200 0 0,1 200,0 Z"
-                      Fill="White"
-                      Stroke="#03673e"
-                      StrokeThickness="3" />-->
-
-
-                <ItemsControl ItemsSource="{Binding Segments}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-
-                <!--  Outer Circle  -->
-                <Ellipse Width="600"
-                         Height="600"
-                         Stroke="#03673e"
-                         StrokeThickness="3" />
-
-                <!--  Central Clickable Button  -->
-                <Button Canvas.Left="200"
-                        Canvas.Top="200"
-                        Width="200"
-                        Height="200"
-                        Command="{Binding SpinWheelCommand}"
-                        Content="SPIN"
-                        FontSize="32"
-                        FontWeight="Bold"
-                        IsEnabled="{Binding IsSpinning, Converter={StaticResource InverseBooleanConverter}}"
-                        Style="{StaticResource RoundButtonStyle}" />
-            </Canvas>
-        </Grid>
-        <!--  Slider for Spin Duration  -->
-        <StackPanel Grid.Row="2"
-                    Margin="0,20,0,0"
+                    VerticalAlignment="Center"
+                    Click="OnLaunchConfettiClick"
+                    Content="0"
+                    Tag="0"
+                    Visibility="Visible" />
+            <Button Width="50"
+                    Height="50"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Bottom"
-                    Orientation="Vertical">
-            <TextBlock HorizontalAlignment="Center"
-                       FontWeight="Bold"
-                       Text="Spin Duration (ms)" />
-            <Slider Width="300"
-                    IsSnapToTickEnabled="True"
-                    Maximum="5000"
-                    Minimum="1000"
-                    TickFrequency="500"
-                    Value="{Binding SpinDuration}" />
-
-            <Slider Width="300"
-                    IsSnapToTickEnabled="True"
-                    Maximum="24"
-                    Minimum="2"
-                    TickFrequency="2"
-                    Value="{Binding SegmentCount}" />
-            <TextBlock HorizontalAlignment="Center" Text="{Binding SpinDuration}" />
+                    VerticalAlignment="Center"
+                    Click="OnLaunchConfettiClick"
+                    Content="1"
+                    Tag="1"
+                    Visibility="Visible" />
+            <Button Width="50"
+                    Height="50"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Click="OnLaunchConfettiClick"
+                    Content="2"
+                    Tag="2"
+                    Visibility="Visible" />
+            <Button Width="50"
+                    Height="50"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Click="OnLaunchConfettiClick"
+                    Content="3"
+                    Tag="3"
+                    Visibility="Visible" />
+            <Button Width="50"
+                    Height="50"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Click="OnLaunchConfettiClick"
+                    Content="4"
+                    Tag="4"
+                    Visibility="Visible" />
+            <Button Width="50"
+                    Height="50"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Click="OnLaunchConfettiClick"
+                    Content="5"
+                    Tag="5"
+                    Visibility="Visible" />
+            <Button Width="50"
+                    Height="50"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Click="OnLaunchConfettiClick"
+                    Content="6"
+                    Tag="6"
+                    Visibility="Visible" />
         </StackPanel>
-        <!--  Selected Participant Display  -->
-        <TextBlock Margin="0,0,0,50"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Bottom"
-                   FontSize="30"
-                   FontWeight="Bold"
-                   Foreground="Black"
-                   Text="{Binding SelectedParticipant.Name}"
-                   Visibility="{Binding SelectedParticipant, Converter={StaticResource NullToVisibilityConverter}}" />
-
+        <!--  Content  -->
+        <Grid Grid.Row="1" Margin="20">
+            <!--  Wheel  -->
+            <Viewbox Stretch="Uniform">
+                <Canvas Name="mainCanvas"
+                        Width="600"
+                        Height="600">
+                    <Canvas.RenderTransform>
+                        <RotateTransform Angle="{Binding SpinAngle}" CenterX="300" CenterY="300" />
+                    </Canvas.RenderTransform>
+                    <!--  Segments  -->
+                    <ItemsControl ItemsSource="{Binding Segments}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                    <!--  Outer Circle  -->
+                    <Ellipse Width="600"
+                             Height="600"
+                             Stroke="#03673e"
+                             StrokeThickness="3" />
+                    <!--  Central Clickable Button  -->
+                    <Button Canvas.Left="200"
+                            Canvas.Top="200"
+                            Width="200"
+                            Height="200"
+                            Command="{Binding SpinWheelCommand}"
+                            Content="SPIN"
+                            FontSize="48"
+                            FontWeight="Bold"
+                            IsEnabled="{Binding IsSpinning, Converter={StaticResource InverseBooleanConverter}}"
+                            Style="{StaticResource RoundButtonStyle}" />
+                </Canvas>
+            </Viewbox>
+            <!--  Winner Name  -->
+            <Viewbox Stretch="Uniform">
+                <Button HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding YourCommand}"
+                        Content="{Binding WinnerName}"
+                        FontSize="60"
+                        FontWeight="Bold"
+                        Foreground="LimeGreen"
+                        RenderTransformOrigin="0.5,0.5"
+                        Visibility="{Binding IsWinnerVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Button.RenderTransform>
+                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                    </Button.RenderTransform>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <TextBlock FontSize="{TemplateBinding FontSize}"
+                                                   FontWeight="{TemplateBinding FontWeight}"
+                                                   Foreground="{TemplateBinding Foreground}"
+                                                   Text="{TemplateBinding Content}"
+                                                   TextAlignment="Center">
+                                            <TextBlock.Effect>
+                                                <DropShadowEffect BlurRadius="20"
+                                                                  Opacity="0.7"
+                                                                  ShadowDepth="15"
+                                                                  Color="Black" />
+                                            </TextBlock.Effect>
+                                        </TextBlock>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsWinnerVisible}" Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                 From="0"
+                                                                 To="1"
+                                                                 Duration="0:0:0.5" />
+                                                <DoubleAnimation AutoReverse="False"
+                                                                 Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                                                 From="0.1"
+                                                                 To="1.0"
+                                                                 Duration="0:0:1" />
+                                                <DoubleAnimation AutoReverse="False"
+                                                                 Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                                                 From="0.1"
+                                                                 To="1.0"
+                                                                 Duration="0:0:1" />
+                                                <ColorAnimation AutoReverse="True"
+                                                                RepeatBehavior="Forever"
+                                                                Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                                                                From="DarkGreen"
+                                                                To="LimeGreen"
+                                                                Duration="0:0:1" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                    <!--<DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                 From="1"
+                                                                 To="0"
+                                                                 Duration="0:0:1" />
+                                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                                                 From="1.5"
+                                                                 To="1.0"
+                                                                 Duration="0:0:1" />
+                                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                                                 From="1.5"
+                                                                 To="1.0"
+                                                                 Duration="0:0:1" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>-->
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Viewbox>
+        </Grid>
         <!--  Footer  -->
         <views:FooterControl Grid.Row="3">
             <views:FooterControl.FooterContent>
                 <Label Margin="10"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center"
-                       Content="Footer Content"
+                       Content="{Binding SpinDuration}"
                        Foreground="White"
-                       Style="{StaticResource SecondaryTitleLabel}" />
+                       Style="{StaticResource SecondaryTitleLabel}"
+                       Visibility="Collapsed" />
             </views:FooterControl.FooterContent>
         </views:FooterControl>
     </Grid>
 </Window>
+
+<!--  Slider  -->
+<!--<StackPanel Margin="0,20,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Orientation="Vertical"
+            Visibility="Collapsed">
+    <Slider Width="300"
+            IsSnapToTickEnabled="True"
+            Maximum="5000"
+            Minimum="1000"
+            TickFrequency="500"
+            Value="{Binding SpinDuration}" />
+    <Slider Width="300"
+            IsSnapToTickEnabled="True"
+            Maximum="24"
+            Minimum="2"
+            TickFrequency="2"
+            Value="{Binding SegmentCount}" />
+</StackPanel>-->
