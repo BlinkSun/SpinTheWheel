@@ -7,13 +7,14 @@
              d:DesignHeight="60"
              d:DesignWidth="800"
              mc:Ignorable="d">
+    <!--  Main container for the footer  -->
     <Grid Height="60" Background="{StaticResource PrimaryBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!--  Logo  -->
+        <!--  Company logo section  -->
         <Image Width="100"
                Height="30"
                Margin="10"
@@ -27,7 +28,8 @@
                                   Color="Black" />
             </Image.Effect>
         </Image>
-        <!--  Content  -->
+
+        <!--  Placeholder for dynamic footer content  -->
         <ContentPresenter Grid.Column="1" Content="{Binding FooterContent, RelativeSource={RelativeSource AncestorType=UserControl}}" />
     </Grid>
 </UserControl>

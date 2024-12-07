@@ -12,21 +12,28 @@
         DataContext="{Binding ParticipantsViewModel, Source={StaticResource ViewModelLocator}}"
         mc:Ignorable="d">
     <Grid>
+        <!--  Define the structure of the grid  -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <!--  Header  -->
             <RowDefinition Height="*" />
+            <!--  Main Content  -->
             <RowDefinition Height="Auto" />
+            <!--  Footer  -->
         </Grid.RowDefinitions>
-        <!--  Header  -->
+
+        <!--  Header Section  -->
         <views:HeaderControl Grid.Row="0">
             <views:HeaderControl.HeaderContent>
                 <StackPanel Margin="10"
                             VerticalAlignment="Center"
                             Orientation="Vertical">
+                    <!--  Main title  -->
                     <Label Margin="0,0,5,0"
                            Content="Gestionnaire des Participants."
                            Foreground="White"
                            Style="{StaticResource PrimaryTitleLabel}" />
+                    <!--  Subtitle displaying total participant count  -->
                     <Label Margin="0,0,0,5"
                            Content="{Binding Participants.Count}"
                            ContentStringFormat="Total de {0} participants."
@@ -35,24 +42,34 @@
                 </StackPanel>
             </views:HeaderControl.HeaderContent>
         </views:HeaderControl>
-        <!--  Content  -->
+
+        <!--  Main Content Section  -->
         <Grid Grid.Row="1" Margin="10">
+            <!--  Define rows and columns for content layout  -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <!--  Filter Section  -->
                 <RowDefinition Height="Auto" />
+                <!--  Buttons Section  -->
                 <RowDefinition Height="*" />
+                <!--  List and Participant Details  -->
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1.5*" />
+                <!--  Main content  -->
                 <ColumnDefinition Width="*" />
+                <!--  Actions  -->
             </Grid.ColumnDefinitions>
+
             <!--  Filter Section  -->
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                <!--  Search filter textbox  -->
                 <TextBox Width="200"
                          HorizontalAlignment="Left"
                          VerticalAlignment="Center"
                          Style="{StaticResource TextBoxStyle}"
                          Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" />
+                <!--  Apply filter button  -->
                 <Button Width="100"
                         Height="40"
                         Command="{Binding ApplyFilterCommand}"
@@ -60,6 +77,8 @@
                         Style="{StaticResource PrimaryButtonStyle}"
                         ToolTip="Rechercher par nom de participant." />
             </StackPanel>
+
+            <!--  Import and Clear buttons  -->
             <Button Width="90"
                     Height="40"
                     HorizontalAlignment="Right"
@@ -77,6 +96,7 @@
                     Content="Effacer tout"
                     Style="{StaticResource SecondaryButtonStyle}"
                     ToolTip="Supprimer tous les participants de la liste." />
+
             <!--  List of Participants  -->
             <ListBox Grid.Row="2"
                      HorizontalContentAlignment="Stretch"
@@ -89,33 +109,34 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
+                            <!--  Columns for participant name and status  -->
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-
                             <!--  Participant Name  -->
                             <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-
-                            <!--  Done  -->
+                            <!--  Status Checkbox  -->
                             <CheckBox Grid.Column="1"
                                       VerticalAlignment="Center"
                                       Content="Tiré"
                                       IsChecked="{Binding Done, Mode=TwoWay}"
                                       IsEnabled="False"
                                       Style="{StaticResource CheckBoxStyle}" />
-
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <!--  Selected Paticipants  -->
+
+            <!--  Selected Participant Details  -->
             <Grid Grid.Row="1"
                   Grid.RowSpan="2"
                   Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
+                    <!--  Details  -->
                     <RowDefinition Height="Auto" />
+                    <!--  Actions  -->
                 </Grid.RowDefinitions>
                 <GroupBox Header="Participant" Style="{StaticResource GroupBoxStyle}">
                     <Grid>
@@ -126,11 +147,13 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
+                        <!--  Name  -->
                         <TextBlock FontWeight="Bold" Text="Nom :" />
                         <TextBox Grid.Row="1"
                                  IsReadOnly="True"
                                  Style="{StaticResource TextBoxStyle}"
                                  Text="{Binding SelectedParticipant.Name}" />
+                        <!--  Description  -->
                         <TextBlock Grid.Row="2"
                                    Margin="0,10,0,0"
                                    FontWeight="Bold"
@@ -138,6 +161,7 @@
                         <Label Grid.Row="3" Style="{StaticResource BodyLabel}">
                             <TextBlock Text="{Binding SelectedParticipantDescription}" TextWrapping="Wrap" />
                         </Label>
+                        <!--  Actions  -->
                         <Grid Grid.Row="4" VerticalAlignment="Bottom">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
@@ -148,6 +172,7 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
+                            <!--  Toggles and buttons  -->
                             <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal">
                                 <ToggleButton Margin="10,0,10,0"
                                               VerticalAlignment="Center"
@@ -188,6 +213,7 @@
                         </Grid>
                     </Grid>
                 </GroupBox>
+                <!--  Reset Button  -->
                 <Button Grid.Row="1"
                         Width="110"
                         Height="40"
@@ -198,16 +224,17 @@
                         ToolTip="Réinitialiser le tirage, signifie que les participants redeviennent non tirés." />
             </Grid>
         </Grid>
-        <!--  Footer  -->
+
+        <!--  Footer Section  -->
         <views:FooterControl Grid.Row="2">
             <views:FooterControl.FooterContent>
+                <!--  Close Button  -->
                 <Button Grid.Column="2"
                         Width="75"
                         Height="40"
                         Margin="10,10,20,10"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
-                        d:BorderBrush="Red"
                         Click="CloseButton_Click"
                         Content="Fermer"
                         Style="{StaticResource SecondaryButtonStyle}" />

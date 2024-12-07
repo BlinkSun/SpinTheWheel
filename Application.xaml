@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converters="clr-namespace:SpinTheWheel.Converters"
              xmlns:local="clr-namespace:SpinTheWheel"
-             xmlns:vm="clr-namespace:SpinTheWheel.ViewModels"
+             xmlns:viewModels="clr-namespace:SpinTheWheel.ViewModels"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -32,13 +32,11 @@
             <SolidColorBrush x:Key="DisabledForegroundBrush" Color="{StaticResource DisabledForeground}" />
 
             <!--  Converters  -->
-            <converters:SegmentColorConverter x:Key="SegmentColorConverter" />
-            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
-            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+            <converters:DivisionConverter x:Key="DivisionConverter" Divisor="3" />
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
 
-            <vm:ViewModelLocator x:Key="ViewModelLocator" />
+            <viewModels:ViewModelLocator x:Key="ViewModelLocator" />
 
             <!--  Styles  -->
             <!--  Base Labels  -->
@@ -158,6 +156,39 @@
                 <Setter Property="Background" Value="White" />
                 <Setter Property="Foreground" Value="{StaticResource SecondaryBrush}" />
                 <Setter Property="BorderBrush" Value="{StaticResource SecondaryBrush}" />
+            </Style>
+            <!--  Round Spin Button  -->
+            <Style x:Key="RoundButtonStyle" TargetType="Button">
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Background" Value="White" />
+                <Setter Property="BorderBrush" Value="{StaticResource SecondaryBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid>
+                                <Ellipse x:Name="ButtonBorder"
+                                         Fill="{TemplateBinding Background}"
+                                         Stroke="{TemplateBinding BorderBrush}"
+                                         StrokeThickness="3" />
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <!--  MouseOver  -->
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="ButtonBorder" Property="Fill" Value="{StaticResource HoverBrush}" />
+                                    <Setter TargetName="ButtonBorder" Property="Stroke" Value="{StaticResource HoverBrush}" />
+                                    <Setter Property="Foreground" Value="White" />
+                                </Trigger>
+                                <!--  Pressed  -->
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="ButtonBorder" Property="Fill" Value="{StaticResource PressedBrush}" />
+                                    <Setter TargetName="ButtonBorder" Property="Stroke" Value="{StaticResource PressedBrush}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
 
             <!--  TextBox  -->
