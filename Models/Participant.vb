@@ -19,11 +19,6 @@ Namespace Models
         End Sub
 
         ''' <summary>
-        ''' Backing field for Id.
-        ''' </summary>
-        Private idValue As Integer
-
-        ''' <summary>
         ''' Gets or sets the unique identifier for the participant.
         ''' </summary>
         Public Property Id As Integer
@@ -37,11 +32,7 @@ Namespace Models
                 End If
             End Set
         End Property
-
-        ''' <summary>
-        ''' Backing field for Name.
-        ''' </summary>
-        Private nameValue As String
+        Private idValue As Integer
 
         ''' <summary>
         ''' Gets or sets the name of the participant.
@@ -57,11 +48,7 @@ Namespace Models
                 End If
             End Set
         End Property
-
-        ''' <summary>
-        ''' Backing field for Done.
-        ''' </summary>
-        Private doneValue As Boolean = False
+        Private nameValue As String
 
         ''' <summary>
         ''' Gets or sets whether the participant has been flagged as "done".
@@ -77,11 +64,7 @@ Namespace Models
                 End If
             End Set
         End Property
-
-        ''' <summary>
-        ''' Backing field for Order.
-        ''' </summary>
-        Private orderValue As Integer = -1
+        Private doneValue As Boolean = False
 
         ''' <summary>
         ''' Gets or sets the participant cardinal order has been flagged as "done".
@@ -97,6 +80,7 @@ Namespace Models
                 End If
             End Set
         End Property
+        Private orderValue As Integer = -1
 
     End Class
 

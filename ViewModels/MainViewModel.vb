@@ -22,9 +22,12 @@ Namespace ViewModels
         ''' </summary>
         Public ReadOnly Property Segments As ObservableCollection(Of UIElement)
         ''' <summary>
-        ''' Command to spin the wheel.
+        ''' Command to reset the wheel.
         ''' </summary>
         Public ReadOnly Property NextSpinCommand As RelayCommand
+        ''' <summary>
+        ''' Command to spin the wheel.
+        ''' </summary>
         Public ReadOnly Property SpinWheelCommand As RelayCommand
         ''' <summary>
         ''' Command to open the participants manager window.
@@ -103,6 +106,9 @@ Namespace ViewModels
         End Property
         Private segmentCountValue As Integer = 16 ' Default: 16 segments
 
+        ''' <summary>
+        ''' Gets or Sets ame of the winner.
+        ''' </summary>
         Public Property WinnerName As String
             Get
                 Return winnerNameValue
@@ -114,6 +120,9 @@ Namespace ViewModels
         End Property
         Private winnerNameValue As String
 
+        ''' <summary>
+        ''' Gets or Sets if is winner visible.
+        ''' </summary>
         Public Property IsWinnerVisible As Boolean
             Get
                 Return isWinnerVisibleValue
@@ -125,6 +134,9 @@ Namespace ViewModels
         End Property
         Private isWinnerVisibleValue As Boolean
 
+        ''' <summary>
+        ''' Collection of confetti.
+        ''' </summary>
         Public Property Confettis As ObservableCollection(Of UIElement)
             Get
                 Return confettisValue
@@ -311,7 +323,7 @@ Namespace ViewModels
                     IsWinnerVisible = True
 
                     ' Celebrate the winner with confetti explosions
-                    While (IsWinnerVisible)
+                    While IsWinnerVisible
                         For j As Integer = 1 To confettiExplosion
                             CreateConfettiExplosion(confettiByExplosion)
                         Next
@@ -319,10 +331,10 @@ Namespace ViewModels
                         Confettis.Clear()
                     End While
                 Else
-                    ErrorService.ShowWarning("No participants are available to select.")
+                    ErrorService.ShowWarning("Aucun participant n'est disponible pour le tirage.")
                 End If
             Catch ex As Exception
-                ErrorService.ShowError($"An error occurred while spinning the wheel: {ex.Message}")
+                ErrorService.ShowError($"Une erreur s'est produite lors du lancement de la roue : {ex.Message}")
             Finally
                 IsSpinning = False
             End Try
@@ -350,7 +362,7 @@ Namespace ViewModels
                     databaseService.UpdateParticipant(participant)
                 End If
             Catch ex As Exception
-                ErrorService.ShowError($"An error occurred while updating the winner: {ex.Message}")
+                ErrorService.ShowError($"Une erreur s'est produite lors de la mise à jour du gagnant : {ex.Message}")
             End Try
             Return participant
         End Function
@@ -362,13 +374,13 @@ Namespace ViewModels
             Try
                 Dim participantsWindow As New ParticipantsWindow With {
                     .Owner = Application.Current.MainWindow,
-                    .WindowStartupLocation = WindowStartupLocation.CenterScreen
+                    .WindowStartupLocation = WindowStartupLocation.CenterOwner
                 }
                 participantsWindow.ShowDialog()
 
                 SelectedParticipant = Nothing
             Catch ex As Exception
-                ErrorService.ShowError($"An error occurred while opening the participants manager: {ex.Message}")
+                ErrorService.ShowError($"Une erreur s'est produite lors de l'ouverture du gestionnaire de participants : {ex.Message}")
             End Try
         End Sub
 

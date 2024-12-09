@@ -33,7 +33,7 @@ Namespace ViewModels
                 ParticipantsViewModel = New ParticipantsViewModel(databaseService)
             Catch ex As Exception
                 ' Log or rethrow exception for debugging
-                Debug.WriteLine($"Error in ViewModelLocator: {ex.Message}")
+                ErrorService.LogToEventViewer($"Error in ViewModelLocator: {ex.Message}", EventLogEntryType.Error)
                 Throw
             End Try
         End Sub

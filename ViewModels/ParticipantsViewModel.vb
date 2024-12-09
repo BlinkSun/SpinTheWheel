@@ -5,11 +5,21 @@ Imports SpinTheWheel.Services
 
 Namespace ViewModels
 
+    ''' <summary>
+    ''' ViewModel for managing participants in the application.
+    ''' Provides functionality for filtering, adding, updating, and importing participants.
+    ''' </summary>
     Public Class ParticipantsViewModel
         Inherits ViewModelBase
 
+        ''' <summary>
+        ''' Service for accessing the database.
+        ''' </summary>
         Private ReadOnly databaseService As DatabaseService
 
+        ''' <summary>
+        ''' Gets or sets the text used for filtering participants.
+        ''' </summary>
         Public Property FilterText As String
             Get
                 Return filterTextValue
@@ -20,6 +30,10 @@ Namespace ViewModels
             End Set
         End Property
         Private filterTextValue As String
+
+        ''' <summary>
+        ''' Gets or sets the collection of all participants.
+        ''' </summary>
         Public Property Participants As ObservableCollection(Of Participant)
             Get
                 Return participantsValue
@@ -30,6 +44,10 @@ Namespace ViewModels
             End Set
         End Property
         Private participantsValue As ObservableCollection(Of Participant)
+
+        ''' <summary>
+        ''' Gets or sets the filtered collection of participants based on <see cref="FilterText"/>.
+        ''' </summary>
         Public Property FilteredParticipants As ObservableCollection(Of Participant)
             Get
                 Return filteredParticipantsValue
@@ -40,6 +58,10 @@ Namespace ViewModels
             End Set
         End Property
         Private filteredParticipantsValue As ObservableCollection(Of Participant)
+
+        ''' <summary>
+        ''' Gets or sets the description of the currently selected participant.
+        ''' </summary>
         Public Property SelectedParticipantDescription As String
             Get
                 Return selectedParticipantDescriptionValue
@@ -50,6 +72,10 @@ Namespace ViewModels
             End Set
         End Property
         Private selectedParticipantDescriptionValue As String
+
+        ''' <summary>
+        ''' Gets or sets the currently selected participant.
+        ''' </summary>
         Public Property SelectedParticipant As Participant
             Get
                 Return selectedParticipantValue
@@ -62,15 +88,50 @@ Namespace ViewModels
         End Property
         Private selectedParticipantValue As Participant
 
+        ''' <summary>
+        ''' Command to add a new participant.
+        ''' </summary>
         Public ReadOnly Property AddCommand As RelayCommand
+
+        ''' <summary>
+        ''' Command to update the selected participant.
+        ''' </summary>
         Public ReadOnly Property UpdateCommand As RelayCommand(Of Participant)
+
+        ''' <summary>
+        ''' Command to reset all participants to their default state.
+        ''' </summary>
         Public ReadOnly Property ResetCommand As RelayCommand
+
+        ''' <summary>
+        ''' Command to mark the selected participant as done.
+        ''' </summary>
         Public ReadOnly Property UpdateDoneCommand As RelayCommand(Of Participant)
+
+        ''' <summary>
+        ''' Command to delete the selected participant.
+        ''' </summary>
         Public ReadOnly Property DeleteCommand As RelayCommand(Of Participant)
+
+        ''' <summary>
+        ''' Command to clear all participants.
+        ''' </summary>
         Public ReadOnly Property ClearCommand As RelayCommand
+
+        ''' <summary>
+        ''' Command to apply the filter to the participant list.
+        ''' </summary>
         Public ReadOnly Property ApplyFilterCommand As RelayCommand
+
+        ''' <summary>
+        ''' Command to import participants from a file.
+        ''' </summary>
         Public ReadOnly Property ImportParticipantsCommand As RelayCommand
 
+        ''' <summary>
+        ''' Initializes a new instance of the <see cref="ParticipantsViewModel"/> class.
+        ''' </summary>
+        ''' <param name="dbService">The database service used to manage participants.</param>
         Public Sub New(dbService As DatabaseService)
             ArgumentNullException.ThrowIfNull(dbService)
 
@@ -85,10 +146,11 @@ Namespace ViewModels
             ClearCommand = New RelayCommand(AddressOf ClearParticipants)
             ApplyFilterCommand = New RelayCommand(AddressOf ApplyFilter)
             ImportParticipantsCommand = New RelayCommand(AddressOf ImportParticipants)
-
-            'GetParticipants()
         End Sub
 
+        ''' <summary>
+        ''' Retrieves the list of participants from the database and updates the <see cref="Participants"/> collection.
+        ''' </summary>
         Public Sub GetParticipants()
             Try
                 Participants.Clear()
@@ -101,7 +163,9 @@ Namespace ViewModels
                 ErrorService.ShowError($"Erreur lors du chargement des participants : {ex.Message}")
             End Try
         End Sub
-
+        ''' <summary>
+        ''' Adds a new participant.
+        ''' </summary>
         Private Sub AddParticipant()
             Try
                 SelectedParticipant = Nothing
@@ -116,9 +180,12 @@ Namespace ViewModels
                     ApplyFilter()
                 End If
             Catch ex As Exception
-                ErrorService.ShowError($"Error adding a new participant: {ex.Message}")
+                ErrorService.ShowError($"Erreur lors de la création d'un nouveau participant: {ex.Message}")
             End Try
         End Sub
+        ''' <summary>
+        ''' Updates the selected participant's information.
+        ''' </summary>
         Private Sub UpdateParticipant()
             Try
                 If SelectedParticipant IsNot Nothing Then
@@ -133,6 +200,9 @@ Namespace ViewModels
                 ErrorService.ShowError($"Erreur lors de la mise à jour du participant : {ex.Message}")
             End Try
         End Sub
+        ''' <summary>
+        ''' Marks the selected participant as done and updates the database.
+        ''' </summary>
         Private Sub UpdateParticipantDone()
             Try
                 If SelectedParticipant IsNot Nothing Then
@@ -150,6 +220,9 @@ Namespace ViewModels
                 ErrorService.ShowError($"Erreur lors de la mise à jour du participant : {ex.Message}")
             End Try
         End Sub
+        ''' <summary>
+        ''' Updates the description of the currently selected participant.
+        ''' </summary>
         Private Sub UpdateParticipantDescription()
             If SelectedParticipant IsNot Nothing Then
                 If SelectedParticipant.Done Then
@@ -159,6 +232,9 @@ Namespace ViewModels
                 End If
             End If
         End Sub
+        ''' <summary>
+        ''' Reset the done flag of the selected participant.
+        ''' </summary>
         Private Sub ResetParticipants()
             Try
                 If MessageBox.Show("Tous les participants seront réinitialisés à l'état non tiré. Voulez-vous continuer ?", "Réinitialiser le tirage.", MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
@@ -167,9 +243,12 @@ Namespace ViewModels
                     GetParticipants()
                 End If
             Catch ex As Exception
-                ErrorService.ShowError($"Erreur lors de la suppression des participants : {ex.Message}")
+                ErrorService.ShowError($"Erreur lors de la mise à jour de tous les participants : {ex.Message}")
             End Try
         End Sub
+        ''' <summary>
+        ''' Delete the selected participant.
+        ''' </summary>
         Private Sub DeleteParticipant()
             Try
                 If SelectedParticipant IsNot Nothing Then
@@ -184,6 +263,9 @@ Namespace ViewModels
                 ErrorService.ShowError($"Erreur lors de la suppression du participant : {ex.Message}")
             End Try
         End Sub
+        ''' <summary>
+        ''' Delete all participant.
+        ''' </summary>
         Private Sub ClearParticipants()
             Try
                 If MessageBox.Show("Êtes-vous sûr de vouloir effacer tous les participants de la liste ?" & vbCrLf & "Cette action est irréversible.", "Suppression de tous les participants", MessageBoxButton.YesNo) = MessageBoxResult.Yes Then
@@ -193,10 +275,13 @@ Namespace ViewModels
                     ApplyFilter()
                 End If
             Catch ex As Exception
-                ErrorService.ShowError($"Erreur lors de la suppression du participant : {ex.Message}")
+                ErrorService.ShowError($"Erreur lors de la suppression des participants : {ex.Message}")
             End Try
         End Sub
 
+        ''' <summary>
+        ''' Apply filter to participants list.
+        ''' </summary>
         Private Sub ApplyFilter()
             Dim filteredList As List(Of Participant) = If(String.IsNullOrWhiteSpace(FilterText),
                                   Participants.ToList,
@@ -205,11 +290,14 @@ Namespace ViewModels
             FilteredParticipants = New ObservableCollection(Of Participant)(filteredList)
             OnPropertyChanged(NameOf(FilteredParticipants))
         End Sub
-        Private Sub ImportParticipants()
+        ''' <summary>
+        ''' Import participants list from file.
+        ''' </summary>
+        Private Async Sub ImportParticipants()
             Try
                 Dim openFileDialog As New Microsoft.Win32.OpenFileDialog With {
                     .Title = "Sélectionner un fichier de participants",
-                    .Filter = "Fichiers texte (*.txt)|*.txt|Fichiers csv (*.csv)|*.csv",
+                    .Filter = "Fichiers texte (*.txt)|*.txt|Fichiers csv (*.csv)|*.csv|Tous les fichiers (*.*)|*.*",
                     .Multiselect = False
                 }
 
@@ -219,36 +307,26 @@ Namespace ViewModels
                         Throw New FileNotFoundException("Le fichier sélectionné est introuvable.")
                     End If
                     Using fileStream = IO.File.Open(filePath, FileMode.Open, FileAccess.Read)
-                        ' Fichier accessible, on ferme le flux immédiatement
+                        ' File not available
                     End Using
-                    Dim lines As String() = File.ReadAllLines(filePath, Text.Encoding.UTF8)
-                    If lines.Length = 0 Then
-                        Throw New InvalidDataException("Le fichier est vide.")
-                    End If
-                    Dim invalidLines As New List(Of String)()
-                    For Each line In lines
-                        If Not String.IsNullOrWhiteSpace(line) Then
-                            Dim trimmedLine = line.Trim()
-                            Dim parts = trimmedLine.Split(" "c, StringSplitOptions.RemoveEmptyEntries)
-                            If parts.Length < 2 Then
-                                invalidLines.Add(trimmedLine)
-                                Continue For
-                            End If
-                            Dim fullName = String.Join(" ", parts)
-                            Dim participant As New Participant() With {
-                                .Name = fullName
-                            }
-                            databaseService.AddParticipant(participant)
-                        End If
+
+                    Mouse.OverrideCursor = Cursors.Wait
+
+                    Dim result As (ValidParticipants As List(Of Participant), InvalidLines As List(Of String))
+
+                    result = Await Task.Run(Function() ProcessFile(filePath))
+
+                    For Each participant In result.ValidParticipants
+                        databaseService.AddParticipant(participant)
                     Next
 
-                    If invalidLines.Count > 0 Then
-                        ErrorService.ShowWarning($"{invalidLines.Count} ligne(s) ont été ignorées en raison d'un format invalide :{Environment.NewLine}{String.Join(Environment.NewLine, invalidLines.Take(5))}...", "Importation partielle")
+                    GetParticipants()
+
+                    If result.InvalidLines.Count > 0 Then
+                        ErrorService.ShowWarning($"{result.InvalidLines.Count} ligne(s) ont été ignorées en raison d'un format invalide :{Environment.NewLine}{String.Join(Environment.NewLine, result.InvalidLines.Take(5))}...", "Importation partielle")
                     Else
                         ErrorService.ShowInfo("Tous les participants ont été importés avec succès !", "Importation réussie")
                     End If
-
-                    GetParticipants()
                 End If
             Catch ex As FileNotFoundException
                 ErrorService.ShowError($"Erreur : {ex.Message}", "Fichier introuvable")
@@ -258,8 +336,39 @@ Namespace ViewModels
                 ErrorService.ShowError($"Erreur : {ex.Message}", "Format de fichier invalide")
             Catch ex As Exception
                 ErrorService.ShowError($"Erreur inattendue : {ex.Message}", "Erreur")
+            Finally
+                Mouse.OverrideCursor = Nothing
             End Try
         End Sub
+        ''' <summary>
+        ''' Processes the file and parses participants from it.
+        ''' </summary>
+        ''' <param name="filePath">The path to the file to process.</param>
+        ''' <returns>A tuple containing a list of valid participants and invalid lines.</returns>
+        Private Shared Function ProcessFile(filePath As String) As (ValidParticipants As List(Of Participant), InvalidLines As List(Of String))
+            Dim validParticipants As New List(Of Participant)()
+            Dim invalidLines As New List(Of String)()
+
+            Dim lines As String() = File.ReadAllLines(filePath, Text.Encoding.UTF8)
+            If lines.Length = 0 Then
+                Throw New InvalidDataException("Le fichier est vide.")
+            End If
+
+            For Each line In lines
+                If Not String.IsNullOrWhiteSpace(line) Then
+                    Dim trimmedLine = line.Trim()
+                    Dim parts = trimmedLine.Split(" "c, StringSplitOptions.RemoveEmptyEntries)
+                    If parts.Length < 2 Then
+                        invalidLines.Add(trimmedLine)
+                        Continue For
+                    End If
+                    Dim fullName = String.Join(" ", parts)
+                    validParticipants.Add(New Participant() With {.Name = fullName})
+                End If
+            Next
+
+            Return (validParticipants, invalidLines)
+        End Function
 
     End Class
 

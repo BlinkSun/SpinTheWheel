@@ -1,7 +1,6 @@
 ﻿Imports System.Data.SQLite
 Imports System.IO
 Imports SpinTheWheel.Models
-Imports SpinTheWheel.ViewModels
 
 Namespace Services
 
@@ -40,7 +39,8 @@ Namespace Services
                     End Using
                 End Using
             Catch ex As Exception
-                Throw New ApplicationException($"Error during database initialization: {ex.Message}", ex)
+                Throw New ApplicationException($"Erreur lors de l'initialisation de la base de données : {ex.Message}", ex)
+
             End Try
         End Sub
 
@@ -76,7 +76,7 @@ Namespace Services
                     End Using
                 End Using
             Catch ex As Exception
-                Throw New ApplicationException($"Error retrieving participants: {ex.Message}", ex)
+                Throw New ApplicationException($"Erreur lors de la récupération des participants : {ex.Message}", ex)
             End Try
             Return participants
         End Function
@@ -104,7 +104,7 @@ Namespace Services
                     End Using
                 End Using
             Catch ex As Exception
-                Throw New ApplicationException($"Error adding participant: {ex.Message}", ex)
+                Throw New ApplicationException($"Erreur lors de l'ajout du participant : {ex.Message}", ex)
             End Try
         End Sub
 
@@ -127,7 +127,7 @@ Namespace Services
                     End Using
                 End Using
             Catch ex As Exception
-                Throw New ApplicationException($"Error updating participant: {ex.Message}", ex)
+                Throw New ApplicationException($"Erreur lors de la mise à jour du participant : {ex.Message}", ex)
             End Try
         End Sub
 
@@ -144,7 +144,7 @@ Namespace Services
                     End Using
                 End Using
             Catch ex As Exception
-                Throw New ApplicationException($"Error updating participant: {ex.Message}", ex)
+                Throw New ApplicationException($"Erreur lors de la mise à jour du participant : {ex.Message}", ex)
             End Try
         End Sub
 
@@ -163,7 +163,8 @@ Namespace Services
                     End Using
                 End Using
             Catch ex As Exception
-                Throw New ApplicationException($"Error deleting participant with ID {participant.Id}: {ex.Message}", ex)
+                Throw New ApplicationException($"Erreur lors de la suppression du participant : {ex.Message}", ex)
+
             End Try
         End Sub
 
@@ -180,7 +181,7 @@ Namespace Services
                     End Using
                 End Using
             Catch ex As Exception
-                Throw New ApplicationException($"Error deleting all participants: {ex.Message}", ex)
+                Throw New ApplicationException($"Erreur lors de la suppression de tous les participants : {ex.Message}", ex)
             End Try
         End Sub
 
@@ -210,7 +211,7 @@ Namespace Services
                     End Using
                 End Using
             Catch ex As Exception
-                Throw New ApplicationException($"Error retrieving random participant: {ex.Message}", ex)
+                Throw New ApplicationException($"Erreur lors de la récupération d'un participant aléatoire : {ex.Message}", ex)
             End Try
             Return Nothing
         End Function
@@ -230,7 +231,7 @@ Namespace Services
                     End Using
                 End Using
             Catch ex As Exception
-                Throw New ApplicationException($"Error retrieving the next order value: {ex.Message}", ex)
+                Throw New ApplicationException($"Erreur lors de la récupération de la prochaine valeur d'ordre : {ex.Message}", ex)
             End Try
         End Function
 

@@ -5,6 +5,7 @@
 
         Private IsFullscreen As Boolean = False
         Private WindowStateCache As WindowState = WindowState.Normal
+
         Private Sub Window_KeyDown(sender As Object, e As KeyEventArgs)
             If e.Key = Key.F11 Then
                 ToggleFullscreen()
@@ -35,6 +36,7 @@
             }
             testControlsWindow.ShowDialog()
         End Sub
+
     End Class
 
 End Namespace
