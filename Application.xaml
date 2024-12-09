@@ -20,16 +20,16 @@
             <Color x:Key="DisabledForeground">#7A7A7A</Color>
 
             <!--  Brushes  -->
-            <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}" />
-            <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}" />
-            <SolidColorBrush x:Key="HoverBrush" Color="{StaticResource HoverColor}" />
-            <SolidColorBrush x:Key="PressedBrush" Color="{StaticResource PressedColor}" />
-            <SolidColorBrush x:Key="BackgroundLightBrush" Color="{StaticResource BackgroundLight}" />
-            <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}" />
-            <SolidColorBrush x:Key="TextBrushInverse" Color="{StaticResource TextColorInverse}" />
-            <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="{StaticResource DisabledBackground}" />
-            <SolidColorBrush x:Key="DisabledBorderBrush" Color="{StaticResource DisabledBorder}" />
-            <SolidColorBrush x:Key="DisabledForegroundBrush" Color="{StaticResource DisabledForeground}" />
+            <SolidColorBrush x:Key="PrimaryBrush" Color="{DynamicResource PrimaryColor}" />
+            <SolidColorBrush x:Key="SecondaryBrush" Color="{DynamicResource SecondaryColor}" />
+            <SolidColorBrush x:Key="HoverBrush" Color="{DynamicResource HoverColor}" />
+            <SolidColorBrush x:Key="PressedBrush" Color="{DynamicResource PressedColor}" />
+            <SolidColorBrush x:Key="BackgroundLightBrush" Color="{DynamicResource BackgroundLight}" />
+            <SolidColorBrush x:Key="TextBrush" Color="{DynamicResource TextColor}" />
+            <SolidColorBrush x:Key="TextBrushInverse" Color="{DynamicResource TextColorInverse}" />
+            <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="{DynamicResource DisabledBackground}" />
+            <SolidColorBrush x:Key="DisabledBorderBrush" Color="{DynamicResource DisabledBorder}" />
+            <SolidColorBrush x:Key="DisabledForegroundBrush" Color="{DynamicResource DisabledForeground}" />
 
             <!--  Converters  -->
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

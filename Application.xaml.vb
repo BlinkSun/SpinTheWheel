@@ -13,6 +13,7 @@ Partial Public Class Application
         ' Initialize the database before loading application components
         DatabaseService.InitializeDatabase()
         InitializeComponent()
+        ThemeManager.LoadTheme()
     End Sub
 
     ''' <summary>
