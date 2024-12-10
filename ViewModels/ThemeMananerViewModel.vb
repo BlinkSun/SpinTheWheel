@@ -1,4 +1,5 @@
 ﻿Imports SpinTheWheel.Services
+Imports SpinTheWheel.Views
 
 Namespace ViewModels
 
