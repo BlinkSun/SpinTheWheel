@@ -639,6 +639,102 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <!--  Slider Style  -->
+            <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
+                <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Focusable" Value="false" />
+                <Setter Property="IsTabStop" Value="false" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RepeatButton}">
+                            <Rectangle Width="{TemplateBinding Width}"
+                                       Height="{TemplateBinding Height}"
+                                       Fill="{TemplateBinding Background}" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!--  Slider Thumb Template  -->
+            <ControlTemplate x:Key="SliderThumbTemplate" TargetType="Thumb">
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Ellipse x:Name="ThumbEllipse"
+                             Width="15"
+                             Height="15"
+                             Fill="{StaticResource PrimaryBrush}"
+                             Stroke="{StaticResource SecondaryBrush}"
+                             StrokeThickness="2" />
+                </Grid>
+                <ControlTemplate.Triggers>
+                    <!--  MouseOver State  -->
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter TargetName="ThumbEllipse" Property="Cursor" Value="Hand" />
+                        <Setter TargetName="ThumbEllipse" Property="Fill" Value="{StaticResource HoverBrush}" />
+                        <Setter TargetName="ThumbEllipse" Property="Stroke" Value="{StaticResource PrimaryBrush}" />
+                    </Trigger>
+                    <!--  Dragging State  -->
+                    <Trigger Property="IsDragging" Value="True">
+                        <Setter TargetName="ThumbEllipse" Property="Cursor" Value="Hand" />
+                        <Setter TargetName="ThumbEllipse" Property="Fill" Value="{StaticResource PressedBrush}" />
+                        <Setter TargetName="ThumbEllipse" Property="Stroke" Value="{StaticResource SecondaryBrush}" />
+                    </Trigger>
+                    <!--  Disabled State  -->
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter TargetName="ThumbEllipse" Property="Fill" Value="{StaticResource DisabledBackgroundBrush}" />
+                        <Setter TargetName="ThumbEllipse" Property="Stroke" Value="{StaticResource DisabledBorderBrush}" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+            <!--  Slider Horizontal Template  -->
+            <ControlTemplate x:Key="SliderHorizontalTemplate" TargetType="{x:Type Slider}">
+                <Border x:Name="border"
+                        Background="Transparent"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="True">
+                    <Grid>
+                        <Border x:Name="TrackBackground"
+                                Height="4"
+                                Margin="5,0"
+                                VerticalAlignment="Center"
+                                Background="{TemplateBinding Foreground}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1" />
+                        <Track x:Name="PART_Track" Margin="5,0">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource RepeatButtonTransparent}" />
+                            </Track.DecreaseRepeatButton>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource RepeatButtonTransparent}" />
+                            </Track.IncreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb x:Name="Thumb"
+                                       VerticalAlignment="Center"
+                                       Focusable="False"
+                                       Template="{StaticResource SliderThumbTemplate}" />
+                            </Track.Thumb>
+                        </Track>
+                    </Grid>
+                </Border>
+                <ControlTemplate.Triggers>
+                    <!--  Disabled State  -->
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Background" Value="{StaticResource DisabledBackgroundBrush}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+            <!--  Slider Style  -->
+            <Style x:Key="SliderStyle" TargetType="{x:Type Slider}">
+                <Setter Property="Height" Value="30" />
+                <Setter Property="Margin" Value="10" />
+                <Setter Property="Padding" Value="5" />
+                <Setter Property="Background" Value="{StaticResource BackgroundLightBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource SecondaryBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
+                <Setter Property="Template" Value="{StaticResource SliderHorizontalTemplate}" />
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

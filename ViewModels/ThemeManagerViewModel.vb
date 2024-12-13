@@ -3,7 +3,7 @@ Imports SpinTheWheel.Views
 
 Namespace ViewModels
 
-    Public Class ThemeMananerViewModel
+    Public Class ThemeManagerViewModel
         Inherits ViewModelBase
 
         Public Property PrimaryColor As Color

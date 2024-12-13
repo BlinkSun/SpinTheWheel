@@ -1,7 +1,6 @@
 ﻿Namespace Views
 
-
-    Public Class ThemeManagerWindow
+    Partial Public Class ThemeManagerWindow
         Inherits Window
     End Class
 
