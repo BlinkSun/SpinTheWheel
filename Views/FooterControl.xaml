@@ -19,7 +19,7 @@
                Height="30"
                Margin="10"
                VerticalAlignment="Center"
-               Source="pack://application:,,,/Assets/desjardins.png"
+               Source="pack://application:,,,/Assets/canadiantire.png"
                Stretch="Uniform">
             <Image.Effect>
                 <DropShadowEffect BlurRadius="10"
