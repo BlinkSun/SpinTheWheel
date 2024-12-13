@@ -199,9 +199,12 @@ Namespace ViewModels
                 Dim midY As Double = centerY - (Radius / 2 * Math.Sin(midAngle * Math.PI / 180.0))
 
                 ' Create the segment path with alternating colors
+                Dim primaryBrush As SolidColorBrush = TryCast(Application.Current.Resources("PrimaryBrush"), SolidColorBrush)
+                Dim secondaryBrush As SolidColorBrush = TryCast(Application.Current.Resources("SecondaryBrush"), SolidColorBrush)
+
                 Dim path As New Path() With {
-                    .Fill = If(i Mod 2 = 0, New SolidColorBrush(ColorConverter.ConvertFromString("#00874e")), Brushes.White),
-                    .Stroke = New SolidColorBrush(ColorConverter.ConvertFromString("#03673e")),
+                    .Fill = If(i Mod 2 = 0, primaryBrush, Brushes.White),
+                    .Stroke = secondaryBrush,
                     .StrokeThickness = 3
                 }
                 Dim figure As New PathFigure() With {
