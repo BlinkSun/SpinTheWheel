@@ -7,32 +7,17 @@ Namespace ViewModels
     ''' </summary>
     Public Class ViewModelLocator
 
-        ''' <summary>
-        ''' Singleton instance of the DatabaseService.
-        ''' </summary>
         Private ReadOnly databaseService As DatabaseService
-
-        ''' <summary>
-        ''' Provides the MainViewModel instance.
-        ''' </summary>
         Public ReadOnly Property MainViewModel As MainViewModel
-
-        ''' <summary>
-        ''' Provides the ParticipantsViewModel instance.
-        ''' </summary>
         Public ReadOnly Property ParticipantsViewModel As ParticipantsViewModel
-
-        ''' <summary>
-        ''' Initializes a new instance of the ViewModelLocator.
-        ''' </summary>
+        Public ReadOnly Property ThemeManagerViewModel As ThemeManagerViewModel
         Public Sub New()
             Try
-                ' Initialize DatabaseService and ViewModels
                 databaseService = Application.DatabaseService
                 MainViewModel = New MainViewModel(databaseService)
                 ParticipantsViewModel = New ParticipantsViewModel(databaseService)
+                ThemeManagerViewModel = New ThemeManagerViewModel()
             Catch ex As Exception
-                ' Log or rethrow exception for debugging
                 ErrorService.LogToEventViewer($"Error in ViewModelLocator: {ex.Message}", EventLogEntryType.Error)
                 Throw
             End Try
