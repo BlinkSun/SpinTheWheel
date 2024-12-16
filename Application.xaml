@@ -12,20 +12,20 @@
             <!--<Color x:Key="PrimaryColor">#00884e</Color>
             <Color x:Key="SecondaryColor">#007944</Color>
             <Color x:Key="HoverColor">#03673e</Color>
-            <Color x:Key="PressedColor">#0f85e2</Color>-->
+            <Color x:Key="PressedColor">#0f85e2</Color>
+            <Color x:Key="BackgroundLight">#e6f2e6</Color>-->
 
             <Color x:Key="PrimaryColor">#e7131a</Color>
             <Color x:Key="SecondaryColor">#830b2c</Color>
             <Color x:Key="HoverColor">#c50003</Color>
             <Color x:Key="PressedColor">#d57e07</Color>
+            <Color x:Key="BackgroundLight">#fce9e9</Color>
 
-            <Color x:Key="BackgroundLight">#e6f2e6</Color>
             <Color x:Key="TextColor">#000000</Color>
             <Color x:Key="TextColorInverse">#FFFFFF</Color>
             <Color x:Key="DisabledBackground">#E0E0E0</Color>
             <Color x:Key="DisabledBorder">#B0B0B0</Color>
             <Color x:Key="DisabledForeground">#7A7A7A</Color>
-
 
             <!--  Brushes  -->
             <SolidColorBrush x:Key="PrimaryBrush" Color="{DynamicResource PrimaryColor}" />
@@ -290,7 +290,7 @@
                 <Setter Property="FontSize" Value="14" />
                 <Setter Property="FontWeight" Value="Bold" />
                 <Setter Property="BorderThickness" Value="2" />
-                <Setter Property="BorderBrush" Value="#007944" />
+                <Setter Property="BorderBrush" Value="{StaticResource SecondaryBrush}" />
                 <Setter Property="Background" Value="White" />
                 <Setter Property="Foreground" Value="Black" />
                 <Setter Property="Template">
@@ -308,11 +308,11 @@
                             <ControlTemplate.Triggers>
                                 <!--  Focused  -->
                                 <Trigger Property="IsFocused" Value="True">
-                                    <Setter TargetName="ListBoxBorder" Property="BorderBrush" Value="#00884e" />
+                                    <Setter TargetName="ListBoxBorder" Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
                                 </Trigger>
                                 <!--  MouseOver  -->
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="ListBoxBorder" Property="BorderBrush" Value="#03673e" />
+                                    <Setter TargetName="ListBoxBorder" Property="BorderBrush" Value="{StaticResource HoverBrush}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -338,15 +338,15 @@
                                         Height="20"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Background="#e6f2e6"
-                                        BorderBrush="#007944"
+                                        Background="{StaticResource BackgroundLightBrush}"
+                                        BorderBrush="{StaticResource SecondaryBrush}"
                                         BorderThickness="2"
                                         CornerRadius="4" />
                                 <Path x:Name="CheckMark"
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
                                       Data="M2,10 L6,14 L14,4"
-                                      Stroke="#007944"
+                                      Stroke="{StaticResource SecondaryBrush}"
                                       StrokeEndLineCap="Round"
                                       StrokeStartLineCap="Round"
                                       StrokeThickness="3"
@@ -359,7 +359,7 @@
                                 <!--  Checked State  -->
                                 <Trigger Property="IsChecked" Value="True">
                                     <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
-                                    <Setter TargetName="CheckBoxBorder" Property="Background" Value="#007944" />
+                                    <Setter TargetName="CheckBoxBorder" Property="Background" Value="{StaticResource SecondaryBrush}" />
                                     <Setter TargetName="CheckMark" Property="Stroke" Value="White" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
@@ -381,7 +381,7 @@
                           HorizontalAlignment="Right"
                           VerticalAlignment="Center"
                           Data="M 0 0 L 4 4 L 8 0 Z"
-                          Fill="#007944"
+                          Fill="{StaticResource SecondaryBrush}"
                           RenderTransformOrigin="0.5,0.5">
                         <Path.RenderTransform>
                             <RotateTransform Angle="0" />
@@ -397,7 +397,7 @@
                         </Setter>
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter TargetName="Arrow" Property="Fill" Value="#03673e" />
+                        <Setter TargetName="Arrow" Property="Fill" Value="{StaticResource HoverBrush}" />
                     </Trigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
@@ -408,7 +408,7 @@
                 <Setter Property="FontWeight" Value="Bold" />
                 <Setter Property="Foreground" Value="Black" />
                 <Setter Property="Background" Value="White" />
-                <Setter Property="BorderBrush" Value="#007944" />
+                <Setter Property="BorderBrush" Value="{StaticResource SecondaryBrush}" />
                 <Setter Property="BorderThickness" Value="2" />
                 <Setter Property="Template">
                     <Setter.Value>
@@ -445,11 +445,11 @@
                             <ControlTemplate.Triggers>
                                 <!--  MouseOver  -->
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="ComboBoxBorder" Property="BorderBrush" Value="#03673e" />
+                                    <Setter TargetName="ComboBoxBorder" Property="BorderBrush" Value="{StaticResource HoverBrush}" />
                                 </Trigger>
                                 <!--  DropDownOpen  -->
                                 <Trigger Property="IsDropDownOpen" Value="True">
-                                    <Setter TargetName="ComboBoxBorder" Property="BorderBrush" Value="#00884e" />
+                                    <Setter TargetName="ComboBoxBorder" Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -501,8 +501,8 @@
             <Style x:Key="ToggleSwitchStyle" TargetType="ToggleButton">
                 <Setter Property="Width" Value="50" />
                 <Setter Property="Height" Value="25" />
-                <Setter Property="Background" Value="#d6e6d6" />
-                <Setter Property="BorderBrush" Value="#007944" />
+                <Setter Property="Background" Value="{StaticResource BackgroundLightBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource SecondaryBrush}" />
                 <Setter Property="BorderThickness" Value="2" />
                 <Setter Property="Template">
                     <Setter.Value>
@@ -520,16 +520,16 @@
                                          HorizontalAlignment="Left"
                                          VerticalAlignment="Center"
                                          Fill="White"
-                                         Stroke="#007944"
+                                         Stroke="{StaticResource SecondaryBrush}"
                                          StrokeThickness="2" />
                             </Grid>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
                                     <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Right" />
-                                    <Setter TargetName="SwitchBackground" Property="Background" Value="#007944" />
+                                    <Setter TargetName="SwitchBackground" Property="Background" Value="{StaticResource SecondaryBrush}" />
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="SwitchBackground" Property="BorderBrush" Value="#03673e" />
+                                    <Setter TargetName="SwitchBackground" Property="BorderBrush" Value="{StaticResource HoverBrush}" />
                                 </Trigger>
                                 <!--  Disabled State  -->
                                 <Trigger Property="IsEnabled" Value="False">
@@ -559,7 +559,7 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Background="White"
-                                        BorderBrush="#007944"
+                                        BorderBrush="{StaticResource SecondaryBrush}"
                                         BorderThickness="2"
                                         CornerRadius="10" />
                                 <Ellipse x:Name="InnerCircle"
@@ -568,7 +568,7 @@
                                          Margin="5,0,0,0"
                                          HorizontalAlignment="Left"
                                          VerticalAlignment="Center"
-                                         Fill="#007944"
+                                         Fill="{StaticResource SecondaryBrush}"
                                          Visibility="Collapsed" />
                                 <ContentPresenter Margin="30,0,0,0"
                                                   HorizontalAlignment="Left"
@@ -577,10 +577,10 @@
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
                                     <Setter TargetName="InnerCircle" Property="Visibility" Value="Visible" />
-                                    <Setter TargetName="OuterCircle" Property="BorderBrush" Value="#00884e" />
+                                    <Setter TargetName="OuterCircle" Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="OuterCircle" Property="BorderBrush" Value="#03673e" />
+                                    <Setter TargetName="OuterCircle" Property="BorderBrush" Value="{StaticResource HoverBrush}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -591,9 +591,9 @@
             <Style x:Key="ProgressBarStyle" TargetType="ProgressBar">
                 <Setter Property="Height" Value="20" />
                 <Setter Property="Margin" Value="10" />
-                <Setter Property="Background" Value="#e6f2e6" />
-                <Setter Property="Foreground" Value="#007944" />
-                <Setter Property="BorderBrush" Value="#007944" />
+                <Setter Property="Background" Value="{StaticResource BackgroundLightBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource SecondaryBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource SecondaryBrush}" />
                 <Setter Property="BorderThickness" Value="2" />
                 <Setter Property="Template">
                     <Setter.Value>
