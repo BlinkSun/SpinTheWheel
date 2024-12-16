@@ -113,6 +113,7 @@
                         Command="{Binding NextSpinCommand}"
                         Content="{Binding WinnerName}"
                         FontSize="60"
+                        Margin="20"
                         FontWeight="Bold"
                         Foreground="{StaticResource PrimaryBrush}"
                         RenderTransformOrigin="0.5,0.5"
