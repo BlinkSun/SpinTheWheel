@@ -5,9 +5,27 @@
              xmlns:converters="clr-namespace:SpinTheWheel.Converters"
              xmlns:local="clr-namespace:SpinTheWheel"
              xmlns:viewModels="clr-namespace:SpinTheWheel.ViewModels"
-             StartupUri="Views/MainWindow.xaml">
+             StartupUri="Views/ThemeManagerWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Dictionnaires d'icônes -->
+                <ResourceDictionary Source="/Assets/Icons/Arrows.xaml" />
+                <ResourceDictionary Source="/Assets/Icons/Calendars.xaml" />
+                <ResourceDictionary Source="/Assets/Icons/Communications.xaml" />
+                <ResourceDictionary Source="/Assets/Icons/Edits.xaml" />
+                <ResourceDictionary Source="/Assets/Icons/Environments.xaml" />
+                <ResourceDictionary Source="/Assets/Icons/Files.xaml" />
+                <ResourceDictionary Source="/Assets/Icons/Interfaces.xaml" />
+                <ResourceDictionary Source="/Assets/Icons/Medias.xaml" />
+                <ResourceDictionary Source="/Assets/Icons/Menus.xaml" />
+                <ResourceDictionary Source="/Assets/Icons/Navigations.xaml" />
+                <ResourceDictionary Source="/Assets/Icons/Shapes.xaml" />
+                <ResourceDictionary Source="/Assets/Icons/Systems.xaml" />
+                <ResourceDictionary Source="/Assets/Icons/Users.xaml" />
+                <ResourceDictionary Source="/Assets/Icons/Warnings.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
             <!--  Colors  -->
             <!--<Color x:Key="PrimaryColor">#00884e</Color>
             <Color x:Key="SecondaryColor">#007944</Color>

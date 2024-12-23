@@ -1,10 +1,11 @@
-﻿<Window x:Class="Views.ThemeManagerWindow"
+﻿<Window x:Class="Views.ThemeManagerWindow" Title="ThemeManagerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:SpinTheWheel.Controls"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:SpinTheWheel"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Title="ThemeManagerWindow"
+        xmlns:views="clr-namespace:SpinTheWheel.Views"
         Width="800"
         Height="450"
         DataContext="{Binding ThemeManagerViewModel, Source={StaticResource ViewModelLocator}}"
@@ -23,42 +24,156 @@
 
                 <!--  Primary Color  -->
                 <TextBlock Text="Primary Color" />
-                <d:ColorPicker SelectedColor="{Binding PrimaryColor, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal">
+                    <controls:IconButton Width="75"
+                                         Height="40"
+                                         Command="{Binding OpenColorDialogCommand}"
+                                         CommandParameter="{Binding SetPrimaryColorAction}"
+                                         Icon="{StaticResource CompassDrawingImage}"
+                                         Style="{StaticResource PrimaryButtonStyle}" />
+                    <Border Width="30"
+                            Height="30"
+                            Margin="2"
+                            Background="{Binding PrimaryColor}"
+                            BorderBrush="{StaticResource SecondaryBrush}"
+                            BorderThickness="2"
+                            CornerRadius="4" />
+                </StackPanel>
 
                 <!--  Secondary Color  -->
                 <TextBlock Margin="0,10,0,0" Text="Secondary Color" />
-                <d:ColorPicker SelectedColor="{Binding SecondaryColor, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding OpenColorDialogCommand}"
+                            CommandParameter="{Binding SecondaryColor, Mode=TwoWay}"
+                            Style="{StaticResource PrimaryButtonStyle}" />
+                    <Border Width="30"
+                            Height="30"
+                            Margin="2"
+                            Background="{Binding SecondaryColor}"
+                            BorderBrush="{StaticResource SecondaryBrush}"
+                            BorderThickness="2"
+                            CornerRadius="4" />
+                </StackPanel>
 
                 <!--  Hover Color  -->
                 <TextBlock Margin="0,10,0,0" Text="Hover Color" />
-                <d:ColorPicker SelectedColor="{Binding HoverColor, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding OpenColorDialogCommand}"
+                            CommandParameter="{Binding HoverColor, Mode=TwoWay}"
+                            Style="{StaticResource PrimaryButtonStyle}" />
+                    <Border Width="30"
+                            Height="30"
+                            Margin="2"
+                            Background="{Binding HoverColor}"
+                            BorderBrush="{StaticResource SecondaryBrush}"
+                            BorderThickness="2"
+                            CornerRadius="4" />
+                </StackPanel>
 
                 <!--  Pressed Color  -->
                 <TextBlock Margin="0,10,0,0" Text="Pressed Color" />
-                <d:ColorPicker SelectedColor="{Binding PressedColor, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding OpenColorDialogCommand}"
+                            CommandParameter="{Binding PressedColor, Mode=TwoWay}"
+                            Style="{StaticResource PrimaryButtonStyle}" />
+                    <Border Width="30"
+                            Height="30"
+                            Margin="2"
+                            Background="{Binding PressedColor}"
+                            BorderBrush="{StaticResource SecondaryBrush}"
+                            BorderThickness="2"
+                            CornerRadius="4" />
+                </StackPanel>
 
                 <!--  Background Light  -->
                 <TextBlock Margin="0,10,0,0" Text="Background Light" />
-                <d:ColorPicker SelectedColor="{Binding BackgroundLight, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding OpenColorDialogCommand}"
+                            CommandParameter="{Binding BackgroundLight, Mode=TwoWay}"
+                            Style="{StaticResource PrimaryButtonStyle}" />
+                    <Border Width="30"
+                            Height="30"
+                            Margin="2"
+                            Background="{Binding BackgroundLight}"
+                            BorderBrush="{StaticResource SecondaryBrush}"
+                            BorderThickness="2"
+                            CornerRadius="4" />
+                </StackPanel>
 
                 <!--  Text Colors  -->
                 <TextBlock Margin="0,10,0,0" Text="Text Color" />
-                <d:ColorPicker SelectedColor="{Binding TextColor, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding OpenColorDialogCommand}"
+                            CommandParameter="{Binding TextColor, Mode=TwoWay}"
+                            Style="{StaticResource PrimaryButtonStyle}" />
+                    <Border Width="30"
+                            Height="30"
+                            Margin="2"
+                            Background="{Binding TextColor}"
+                            BorderBrush="{StaticResource SecondaryBrush}"
+                            BorderThickness="2"
+                            CornerRadius="4" />
+                </StackPanel>
 
                 <TextBlock Margin="0,10,0,0" Text="Text Color Inverse" />
-                <d:ColorPicker SelectedColor="{Binding TextColorInverse, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding OpenColorDialogCommand}"
+                            CommandParameter="{Binding TextColorInverse, Mode=TwoWay}"
+                            Style="{StaticResource PrimaryButtonStyle}" />
+                    <Border Width="30"
+                            Height="30"
+                            Margin="2"
+                            Background="{Binding TextColorInverse}"
+                            BorderBrush="{StaticResource SecondaryBrush}"
+                            BorderThickness="2"
+                            CornerRadius="4" />
+                </StackPanel>
 
                 <!--  Disabled Colors  -->
                 <TextBlock Margin="0,10,0,0" Text="Disabled Background" />
-                <d:ColorPicker SelectedColor="{Binding DisabledBackground, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding OpenColorDialogCommand}"
+                            CommandParameter="{Binding DisabledBackground, Mode=TwoWay}"
+                            Style="{StaticResource PrimaryButtonStyle}" />
+                    <Border Width="30"
+                            Height="30"
+                            Margin="2"
+                            Background="{Binding DisabledBackground}"
+                            BorderBrush="{StaticResource SecondaryBrush}"
+                            BorderThickness="2"
+                            CornerRadius="4" />
+                </StackPanel>
 
                 <TextBlock Margin="0,10,0,0" Text="Disabled Border" />
-                <d:ColorPicker SelectedColor="{Binding DisabledBorder, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal">
+                    <controls:IconButton Command="{Binding OpenColorDialogCommand}"
+                                         CommandParameter="{Binding DisabledBorder, Mode=TwoWay}"
+                                         Style="{StaticResource PrimaryButtonStyle}" />
+                    <Border Width="30"
+                            Height="30"
+                            Margin="2"
+                            Background="{Binding DisabledBorder}"
+                            BorderBrush="{StaticResource SecondaryBrush}"
+                            BorderThickness="2"
+                            CornerRadius="4" />
+                </StackPanel>
 
                 <TextBlock Margin="0,10,0,0" Text="Disabled Foreground" />
-                <d:ColorPicker SelectedColor="{Binding DisabledForeground, Mode=TwoWay}" />
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding OpenColorDialogCommand}"
+                            CommandParameter="{Binding DisabledForeground, Mode=TwoWay}"
+                            Style="{StaticResource PrimaryButtonStyle}" />
+                    <Border Width="30"
+                            Height="30"
+                            Margin="2"
+                            Background="{Binding DisabledForeground}"
+                            BorderBrush="{StaticResource SecondaryBrush}"
+                            BorderThickness="2"
+                            CornerRadius="4" />
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
+
 
         <!--  Buttons  -->
         <StackPanel Grid.Row="1"

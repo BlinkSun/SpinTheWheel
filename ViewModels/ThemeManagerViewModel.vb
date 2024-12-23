@@ -18,6 +18,7 @@ Namespace ViewModels
         Public Property DisabledForeground As Color
 
 
+        Public ReadOnly Property OpenColorDialogCommand As RelayCommand(Of Action(Of Color))
         Public ReadOnly Property SaveCommand As RelayCommand
         Public ReadOnly Property CancelCommand As RelayCommand
 
@@ -35,8 +36,24 @@ Namespace ViewModels
             DisabledForeground = CType(Application.Current.Resources("DisabledForeground"), Color)
 
             ' Initialize commands
+            OpenColorDialogCommand = New RelayCommand(Of Action(Of Color))(AddressOf OpenColorDialog)
             SaveCommand = New RelayCommand(AddressOf SaveTheme)
             CancelCommand = New RelayCommand(AddressOf Cancel)
+        End Sub
+
+        ''' <summary>
+        ''' Méthode pour ouvrir le ColorPicker et appliquer la nouvelle couleur via l'Action passée en paramètre.
+        ''' </summary>
+        ''' <param name="colorSetter">Action pour définir la nouvelle couleur.</param>
+        Private Sub OpenColorDialog(colorSetter As Action(Of Color))
+            If colorSetter Is Nothing Then Return
+
+            ' Initialisez le sélecteur de couleur
+            Dim colorPicker = New ColorPickerWindow()
+            If If(colorPicker.ShowDialog(), False) Then
+                ' Appliquez la couleur sélectionnée en utilisant l'Action
+                colorSetter.Invoke(colorPicker.SelectedColor)
+            End If
         End Sub
 
         ''' <summary>
@@ -79,6 +96,67 @@ Namespace ViewModels
                 End If
             Next
         End Sub
+
+        Public ReadOnly Property SetPrimaryColorAction As Action(Of Color)
+            Get
+                Return Sub(newColor) PrimaryColor = newColor
+            End Get
+        End Property
+
+        Public ReadOnly Property SetSecondaryColorAction As Action(Of Color)
+            Get
+                Return Sub(newColor) SecondaryColor = newColor
+            End Get
+        End Property
+
+        Public ReadOnly Property SetHoverColorAction As Action(Of Color)
+            Get
+                Return Sub(newColor) HoverColor = newColor
+            End Get
+        End Property
+
+        Public ReadOnly Property SetPressedColorAction As Action(Of Color)
+            Get
+                Return Sub(newColor) PressedColor = newColor
+            End Get
+        End Property
+
+        Public ReadOnly Property SetBackgroundLightAction As Action(Of Color)
+            Get
+                Return Sub(newColor) BackgroundLight = newColor
+            End Get
+        End Property
+
+        Public ReadOnly Property SetTextColorAction As Action(Of Color)
+            Get
+                Return Sub(newColor) TextColor = newColor
+            End Get
+        End Property
+
+        Public ReadOnly Property SetTextColorInverseAction As Action(Of Color)
+            Get
+                Return Sub(newColor) TextColorInverse = newColor
+            End Get
+        End Property
+
+        Public ReadOnly Property SetDisabledBackgroundAction As Action(Of Color)
+            Get
+                Return Sub(newColor) DisabledBackground = newColor
+            End Get
+        End Property
+
+        Public ReadOnly Property SetDisabledBorderAction As Action(Of Color)
+            Get
+                Return Sub(newColor) DisabledBorder = newColor
+            End Get
+        End Property
+
+        Public ReadOnly Property SetDisabledForegroundAction As Action(Of Color)
+            Get
+                Return Sub(newColor) DisabledForeground = newColor
+            End Get
+        End Property
+
 
     End Class
 

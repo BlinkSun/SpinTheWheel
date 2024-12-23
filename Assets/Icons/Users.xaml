@@ -1,0 +1,145 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Geometry x:Key="User_AddGeometry">F1 M24,24z M0,0z M15,19C15,16.7909 12.3137,15 9,15 5.68629,15 3,16.7909 3,19 M19,16L19,13 M19,13L19,10 M19,13L16,13 M19,13L22,13 M9,12C6.79086,12 5,10.2091 5,8 5,5.79086 6.79086,4 9,4 11.2091,4 13,5.79086 13,8 13,10.2091 11.2091,12 9,12z</Geometry>
+  <DrawingGroup x:Key="User_AddDrawingGroup" ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+    <DrawingGroup Opacity="1">
+      <GeometryDrawing Geometry="{StaticResource User_AddGeometry}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="User_AddDrawingImage" Drawing="{StaticResource User_AddDrawingGroup}" />
+  <Geometry x:Key="User_Card_IDGeometry">F1 M24,24z M0,0z M6,18C6.06366,18,6.12926,18,6.19691,18L12,18 M6,18C5.01173,17.9992 4.49334,17.9868 4.0918,17.7822 3.71547,17.5905 3.40973,17.2837 3.21799,16.9074 3,16.4796 3,15.9203 3,14.8002L3,9.2002C3,8.08009 3,7.51962 3.21799,7.0918 3.40973,6.71547 3.71547,6.40973 4.0918,6.21799 4.51962,6 5.08009,6 6.2002,6L17.8002,6C18.9203,6 19.4796,6 19.9074,6.21799 20.2837,6.40973 20.5905,6.71547 20.7822,7.0918 21,7.5192 21,8.07899 21,9.19691L21,14.8031C21,15.921 21,16.48 20.7822,16.9074 20.5905,17.2837 20.2837,17.5905 19.9074,17.7822 19.48,18 18.921,18 17.8031,18L12,18 M6,18C6.00004,16.8954 7.34317,16 9,16 10.6569,16 12,16.8954 12,18 M6,18C6,18,6,17.9999,6,18z M18,14L14,14 M18,11L15,11 M9,13C7.89543,13 7,12.1046 7,11 7,9.89543 7.89543,9 9,9 10.1046,9 11,9.89543 11,11 11,12.1046 10.1046,13 9,13z</Geometry>
+  <DrawingGroup x:Key="User_Card_IDDrawingGroup" ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+    <DrawingGroup Opacity="1">
+      <GeometryDrawing Geometry="{StaticResource User_Card_IDGeometry}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="User_Card_IDDrawingImage" Drawing="{StaticResource User_Card_IDDrawingGroup}" />
+  <Geometry x:Key="User_02Geometry">F1 M24,24z M0,0z M20,21C20,18.2386 16.4183,16 12,16 7.58172,16 4,18.2386 4,21 M12,13C9.23858,13 7,10.7614 7,8 7,5.23858 9.23858,3 12,3 14.7614,3 17,5.23858 17,8 17,10.7614 14.7614,13 12,13z</Geometry>
+  <DrawingGroup x:Key="User_02DrawingGroup" ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+    <DrawingGroup Opacity="1">
+      <GeometryDrawing Geometry="{StaticResource User_02Geometry}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="User_02DrawingImage" Drawing="{StaticResource User_02DrawingGroup}" />
+  <Geometry x:Key="User_VoiceGeometry">F1 M24,24z M0,0z M15,19C15,16.7909 12.3137,15 9,15 5.68629,15 3,16.7909 3,19 M16.8281,5.17188C17.1996,5.54331 17.4942,5.98427 17.6952,6.46957 17.8962,6.95487 17.9999,7.47533 17.9999,8.00062 17.9999,8.52591 17.8963,9.04497 17.6953,9.53027 17.4943,10.0156 17.1996,10.457 16.8281,10.8285 M19,3C19.6566,3.65661 20.1775,4.43612 20.5328,5.29402 20.8882,6.15192 21.0718,7.07127 21.0718,7.99985 21.0718,8.92844 20.8886,9.84815 20.5332,10.7061 20.1778,11.564 19.6566,12.3435 19,13.0001 M9,12C6.79086,12 5,10.2091 5,8 5,5.79086 6.79086,4 9,4 11.2091,4 13,5.79086 13,8 13,10.2091 11.2091,12 9,12z</Geometry>
+  <DrawingGroup x:Key="User_VoiceDrawingGroup" ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+    <DrawingGroup Opacity="1">
+      <GeometryDrawing Geometry="{StaticResource User_VoiceGeometry}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="User_VoiceDrawingImage" Drawing="{StaticResource User_VoiceDrawingGroup}" />
+  <Geometry x:Key="Users_GroupGeometry">F1 M24,24z M0,0z M17,20C17,18.3431 14.7614,17 12,17 9.23858,17 7,18.3431 7,20 M21,17.0004C21,15.7702,19.7659,14.7129,18,14.25 M3,17.0004C3,15.7702,4.2341,14.7129,6,14.25 M18,10.2361C18.6137,9.68679 19,8.8885 19,8 19,6.34315 17.6569,5 16,5 15.2316,5 14.5308,5.28885 14,5.76389 M6,10.2361C5.38625,9.68679 5,8.8885 5,8 5,6.34315 6.34315,5 8,5 8.76835,5 9.46924,5.28885 10,5.76389 M12,14C10.3431,14 9,12.6569 9,11 9,9.34315 10.3431,8 12,8 13.6569,8 15,9.34315 15,11 15,12.6569 13.6569,14 12,14z</Geometry>
+  <DrawingGroup x:Key="Users_GroupDrawingGroup" ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+    <DrawingGroup Opacity="1">
+      <GeometryDrawing Geometry="{StaticResource Users_GroupGeometry}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="Users_GroupDrawingImage" Drawing="{StaticResource Users_GroupDrawingGroup}" />
+  <Geometry x:Key="User_CloseGeometry">F1 M24,24z M0,0z M15,19C15,16.7909 12.3137,15 9,15 5.68629,15 3,16.7909 3,19 M17,14L19,12 M19,12L21,10 M19,12L17,10 M19,12L21,14 M9,12C6.79086,12 5,10.2091 5,8 5,5.79086 6.79086,4 9,4 11.2091,4 13,5.79086 13,8 13,10.2091 11.2091,12 9,12z</Geometry>
+  <DrawingGroup x:Key="User_CloseDrawingGroup" ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+    <DrawingGroup Opacity="1">
+      <GeometryDrawing Geometry="{StaticResource User_CloseGeometry}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="User_CloseDrawingImage" Drawing="{StaticResource User_CloseDrawingGroup}" />
+  <Geometry x:Key="User_CheckGeometry">F1 M24,24z M0,0z M15,19C15,16.7909 12.3137,15 9,15 5.68629,15 3,16.7909 3,19 M21,10L17,14 15,12 M9,12C6.79086,12 5,10.2091 5,8 5,5.79086 6.79086,4 9,4 11.2091,4 13,5.79086 13,8 13,10.2091 11.2091,12 9,12z</Geometry>
+  <DrawingGroup x:Key="User_CheckDrawingGroup" ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+    <DrawingGroup Opacity="1">
+      <GeometryDrawing Geometry="{StaticResource User_CheckGeometry}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="User_CheckDrawingImage" Drawing="{StaticResource User_CheckDrawingGroup}" />
+  <Geometry x:Key="User_RemoveGeometry">F1 M24,24z M0,0z M15,19C15,16.7909 12.3137,15 9,15 5.68629,15 3,16.7909 3,19 M15,13L21,13 M9,12C6.79086,12 5,10.2091 5,8 5,5.79086 6.79086,4 9,4 11.2091,4 13,5.79086 13,8 13,10.2091 11.2091,12 9,12z</Geometry>
+  <DrawingGroup x:Key="User_RemoveDrawingGroup" ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+    <DrawingGroup Opacity="1">
+      <GeometryDrawing Geometry="{StaticResource User_RemoveGeometry}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="User_RemoveDrawingImage" Drawing="{StaticResource User_RemoveDrawingGroup}" />
+  <Geometry x:Key="User_03Geometry">F1 M24,24z M0,0z M18,19C18,16.7909 15.3137,15 12,15 8.68629,15 6,16.7909 6,19 M12,12C9.79086,12 8,10.2091 8,8 8,5.79086 9.79086,4 12,4 14.2091,4 16,5.79086 16,8 16,10.2091 14.2091,12 12,12z</Geometry>
+  <DrawingGroup x:Key="User_03DrawingGroup" ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+    <DrawingGroup Opacity="1">
+      <GeometryDrawing Geometry="{StaticResource User_03Geometry}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="User_03DrawingImage" Drawing="{StaticResource User_03DrawingGroup}" />
+  <Geometry x:Key="User_CircleGeometry">F1 M24,24z M0,0z M17.2166,19.3323C15.9349,17.9008 14.0727,17 12,17 9.92734,17 8.06492,17.9008 6.7832,19.3323 M12,21C7.02944,21 3,16.9706 3,12 3,7.02944 7.02944,3 12,3 16.9706,3 21,7.02944 21,12 21,16.9706 16.9706,21 12,21z M12,14C10.3431,14 9,12.6569 9,11 9,9.34315 10.3431,8 12,8 13.6569,8 15,9.34315 15,11 15,12.6569 13.6569,14 12,14z</Geometry>
+  <DrawingGroup x:Key="User_CircleDrawingGroup" ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+    <DrawingGroup Opacity="1">
+      <GeometryDrawing Geometry="{StaticResource User_CircleGeometry}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="User_CircleDrawingImage" Drawing="{StaticResource User_CircleDrawingGroup}" />
+  <Geometry x:Key="UsersGeometry">F1 M24,24z M0,0z M21,19.9999C21,18.2583,19.3304,16.7767,17,16.2275 M15,20C15,17.7909 12.3137,16 9,16 5.68629,16 3,17.7909 3,20 M15,13C17.2091,13 19,11.2091 19,9 19,6.79086 17.2091,5 15,5 M9,13C6.79086,13 5,11.2091 5,9 5,6.79086 6.79086,5 9,5 11.2091,5 13,6.79086 13,9 13,11.2091 11.2091,13 9,13z</Geometry>
+  <DrawingGroup x:Key="UsersDrawingGroup" ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+    <DrawingGroup Opacity="1">
+      <GeometryDrawing Geometry="{StaticResource UsersGeometry}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="UsersDrawingImage" Drawing="{StaticResource UsersDrawingGroup}" />
+  <Geometry x:Key="User_SquareGeometry">F1 M24,24z M0,0z M17,21C17,18.2386 14.7614,16 12,16 9.23858,16 7,18.2386 7,21 M17,21L17.8031,21C18.921,21 19.48,21 19.9074,20.7822 20.2837,20.5905 20.5905,20.2837 20.7822,19.9074 21,19.48 21,18.921 21,17.8031L21,6.19691C21,5.07899 21,4.5192 20.7822,4.0918 20.5905,3.71547 20.2837,3.40973 19.9074,3.21799 19.4796,3 18.9203,3 17.8002,3L6.2002,3C5.08009,3 4.51962,3 4.0918,3.21799 3.71547,3.40973 3.40973,3.71547 3.21799,4.0918 3,4.51962 3,5.08009 3,6.2002L3,17.8002C3,18.9203 3,19.4796 3.21799,19.9074 3.40973,20.2837 3.71547,20.5905 4.0918,20.7822 4.5192,21 5.07899,21 6.19691,21L7,21 M17,21L7,21 M12,13C10.3431,13 9,11.6569 9,10 9,8.34315 10.3431,7 12,7 13.6569,7 15,8.34315 15,10 15,11.6569 13.6569,13 12,13z</Geometry>
+  <DrawingGroup x:Key="User_SquareDrawingGroup" ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+    <DrawingGroup Opacity="1">
+      <GeometryDrawing Geometry="{StaticResource User_SquareGeometry}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="User_SquareDrawingImage" Drawing="{StaticResource User_SquareDrawingGroup}" />
+  <Geometry x:Key="User_01Geometry">F1 M24,24z M0,0z M19,21C19,17.134 15.866,14 12,14 8.13401,14 5,17.134 5,21 M12,11C9.79086,11 8,9.20914 8,7 8,4.79086 9.79086,3 12,3 14.2091,3 16,4.79086 16,7 16,9.20914 14.2091,11 12,11z</Geometry>
+  <DrawingGroup x:Key="User_01DrawingGroup" ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+    <DrawingGroup Opacity="1">
+      <GeometryDrawing Geometry="{StaticResource User_01Geometry}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="2" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="User_01DrawingImage" Drawing="{StaticResource User_01DrawingGroup}" />
+</ResourceDictionary>
